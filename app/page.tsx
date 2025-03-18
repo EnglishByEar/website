@@ -46,8 +46,8 @@ export default function Home() {
           </div>
         </section>
 
-        <section className="container py-12 md:py-24 lg:py-32 rounded-lg relative flex items-center justify-center z-10">
-          <div className="absolute inset-0 bg-cover bg-center brightness-75 opacity-20 bg-[url(/banner1.jpg)] -z-10 rounded-lg"> </div>
+        <section className="container py-12 md:py-24 lg:py-32 rounded-lg  flex items-center justify-center z-10">
+          <div className="absolute inset-0 bg-cover bg-center opacity-5 bg-[url(/background.png)] -z-10"> </div>
           <div className="mx-auto grid max-w-5xl items-center gap-6 py-12 lg:grid-cols-3">
             <div className="flex flex-col items-center gap-2 text-center">
               <div className="flex h-16 w-16 items-center justify-center rounded-full bg-primary/10">
