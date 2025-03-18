@@ -90,15 +90,15 @@ export default function Home() {
               <ul className="grid gap-2">
                 <li className="flex items-center gap-2">
                   <div className="h-2 w-2 rounded-full bg-green-500" />
-                  <span>Simple: Short sentences and common vocabulary</span>
+                  <span><b>Easy</b> Short sentences and common vocabulary</span>
                 </li>
                 <li className="flex items-center gap-2">
                   <div className="h-2 w-2 rounded-full bg-yellow-500" />
-                  <span>Medium: Longer paragraphs with more complex structures</span>
+                  <span><b>Medium</b> Longer paragraphs with more complex structures</span>
                 </li>
                 <li className="flex items-center gap-2">
                   <div className="h-2 w-2 rounded-full bg-red-500" />
-                  <span>Advanced: Native-speed content with specialized vocabulary</span>
+                  <span><b>Advanced</b> Native-speed content with specialized vocabulary</span>
                 </li>
               </ul>
             </div>
