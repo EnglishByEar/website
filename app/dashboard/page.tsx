@@ -9,6 +9,7 @@ import { Progress } from "@/components/ui/progress"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Badge } from "@/components/ui/badge"
 import { Play, Award, Clock, BarChart2, Trophy, Headphones } from "lucide-react"
+import Image from "next/image"
 
 export default function DashboardPage() {
   const { supabase, user } = useSupabase()
@@ -119,7 +120,7 @@ export default function DashboardPage() {
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">Exercises Completed</CardTitle>
-            <Headphones className="h-4 w-4 text-muted-foreground" />
+            <Image src={"/logo.png"} alt="logo" height={40} width={40}/>
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">{stats.exercisesCompleted}</div>
