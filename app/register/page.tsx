@@ -60,7 +60,7 @@ export default function RegisterPage() {
 
       toast({
         title: "Registration successful",
-        description: "Welcome to Verbavox! You can now log in.",
+        description: "Welcome to EnglishByEar! You can now log in.",
       })
 
       router.push("/login")
@@ -79,12 +79,12 @@ export default function RegisterPage() {
     <div className="container flex h-screen w-screen flex-col items-center justify-center">
       <Link href="/" className="absolute left-4 top-4 md:left-8 md:top-8 flex items-center gap-2">
         <Image src={"/logo.png"} alt="logo" height={40} width={40}/>
-        <span className="text-xl font-bold">Verbavox</span>
+        <span className="text-xl font-bold">EnglishByEar</span>
       </Link>
       <Card className="w-full max-w-md">
         <CardHeader className="space-y-1">
           <CardTitle className="text-2xl">Create an account</CardTitle>
-          <CardDescription>Enter your information to create a Verbavox account</CardDescription>
+          <CardDescription>Enter your information to create a EnglishByEar account</CardDescription>
         </CardHeader>
         <form onSubmit={handleRegister}>
           <CardContent className="grid gap-4">

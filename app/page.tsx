@@ -10,7 +10,7 @@ export default function Home() {
         <div className="container flex h-16 items-center justify-between py-4">
           <div className="flex items-center gap-2">
             <Image src={"/logo.png"} alt="logo" height={40} width={40}/>
-            <span className="text-xl font-bold">Verbavox</span>
+            <span className="text-xl font-bold">EnglishByEar</span>
           </div>
           <nav className="flex items-center gap-4">
             <Link href="/login">
@@ -26,7 +26,7 @@ export default function Home() {
         <section className="container py-12 md:py-24 lg:py-32">
           <div className="mx-auto flex max-w-[980px] flex-col items-center gap-4 text-center">
             <h1 className="text-3xl font-bold leading-tight tracking-tighter md:text-5xl lg:text-6xl lg:leading-[1.1]">
-              Master English Listening Skills with Verbavox
+              Master English Listening Skills with EnglishByEar
             </h1>
             <p className="max-w-[750px] text-lg text-muted-foreground sm:text-xl">
               Practice listening to English texts at your own pace and track your progress over time.
@@ -47,7 +47,7 @@ export default function Home() {
         </section>
 
         <section className="container py-12 md:py-24 lg:py-32 rounded-lg  flex items-center justify-center z-10">
-          <div className="absolute inset-0 bg-cover bg-center opacity-5 bg-[url(/background.png)] -z-10"> </div>
+          {/* <div className="absolute inset-0 bg-cover bg-center opacity-5 bg-[url(/background.png)] -z-10"> </div> */}
           <div className="mx-auto grid max-w-5xl items-center gap-6 py-12 lg:grid-cols-3">
             <div className="flex flex-col items-center gap-2 text-center">
               <div className="flex h-16 w-16 items-center justify-center rounded-full bg-primary/10">
@@ -130,7 +130,7 @@ export default function Home() {
       <footer className="border-t py-6 md:py-0">
         <div className="container flex flex-col items-center justify-between gap-4 md:h-16 md:flex-row">
           <p className="text-center text-sm leading-loose text-muted-foreground md:text-left">
-            © 2025 Verbavox. All rights reserved.
+            © 2025 EnglishByEar. All rights reserved.
           </p>
           <div className="flex items-center gap-4">
             <Link href="/terms" className="text-sm text-muted-foreground underline-offset-4 hover:underline">
