@@ -99,4 +99,3 @@ export function LineChart({ data, options }: ChartProps) {
 
   return <Line data={data} options={chartOptions} />
 }
-

@@ -1,7 +1,6 @@
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
 import { Headphones, BarChart2, Trophy, Clock } from "lucide-react"
-import Image from "next/image"
 
 export default function Home() {
   return (
@@ -9,7 +8,7 @@ export default function Home() {
       <header className="sticky top-0 z-40 border-b bg-background">
         <div className="container flex h-16 items-center justify-between py-4">
           <div className="flex items-center gap-2">
-            <Image src={"/logo.png"} alt="logo" height={40} width={40}/>
+            <Headphones className="h-6 w-6 text-primary" />
             <span className="text-xl font-bold">EnglishByEar</span>
           </div>
           <nav className="flex items-center gap-4">
@@ -46,8 +45,7 @@ export default function Home() {
           </div>
         </section>
 
-        <section className="container py-12 md:py-24 lg:py-32 rounded-lg  flex items-center justify-center z-10">
-          {/* <div className="absolute inset-0 bg-cover bg-center opacity-5 bg-[url(/background.png)] -z-10"> </div> */}
+        <section className="container py-12 md:py-24 lg:py-32 bg-muted/50 rounded-lg">
           <div className="mx-auto grid max-w-5xl items-center gap-6 py-12 lg:grid-cols-3">
             <div className="flex flex-col items-center gap-2 text-center">
               <div className="flex h-16 w-16 items-center justify-center rounded-full bg-primary/10">
@@ -90,15 +88,15 @@ export default function Home() {
               <ul className="grid gap-2">
                 <li className="flex items-center gap-2">
                   <div className="h-2 w-2 rounded-full bg-green-500" />
-                  <span><b>Easy</b> Short sentences and common vocabulary</span>
+                  <span>Simple: Short sentences and common vocabulary</span>
                 </li>
                 <li className="flex items-center gap-2">
                   <div className="h-2 w-2 rounded-full bg-yellow-500" />
-                  <span><b>Medium</b> Longer paragraphs with more complex structures</span>
+                  <span>Medium: Longer paragraphs with more complex structures</span>
                 </li>
                 <li className="flex items-center gap-2">
                   <div className="h-2 w-2 rounded-full bg-red-500" />
-                  <span><b>Advanced</b> Native-speed content with specialized vocabulary</span>
+                  <span>Advanced: Native-speed content with specialized vocabulary</span>
                 </li>
               </ul>
             </div>
@@ -145,4 +143,3 @@ export default function Home() {
     </div>
   )
 }
-

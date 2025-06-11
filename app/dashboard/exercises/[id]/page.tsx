@@ -350,4 +350,3 @@ export default function ExercisePage({ params }: { params: { id: string } }) {
     </div>
   )
 }
-

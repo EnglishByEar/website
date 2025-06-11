@@ -74,4 +74,3 @@ export const useSupabase = () => {
   }
   return context
 }
-

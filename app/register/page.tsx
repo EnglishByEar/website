@@ -10,8 +10,8 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
+import { Headphones } from "lucide-react"
 import { useToast } from "@/hooks/use-toast"
-import Image from "next/image"
 
 export default function RegisterPage() {
   const [email, setEmail] = useState("")
@@ -32,7 +32,7 @@ export default function RegisterPage() {
       }
 
       // Register the user
-      const { error: signUpError } = await supabase.auth.signUp({
+      const { data: authData, error: signUpError } = await supabase.auth.signUp({
         email,
         password,
         options: {
@@ -46,25 +46,39 @@ export default function RegisterPage() {
         throw signUpError
       }
 
-      // Create a profile in the profiles table
+      // Check if user was created successfully
+      if (!authData.user) {
+        throw new Error("User registration failed")
+      }
+
+      // Create a profile in the profiles table using the user ID from the signup response
       const { error: profileError } = await supabase.from("profiles").insert({
-        id: (await supabase.auth.getUser()).data.user?.id,
+        id: authData.user.id,
         username,
         email,
         created_at: new Date().toISOString(),
       })
 
       if (profileError) {
-        throw profileError
+        console.error("Profile creation error:", profileError)
+        // Don't throw here - the user account was created successfully
+        // The profile can be created later when they first log in
       }
 
       toast({
         title: "Registration successful",
-        description: "Welcome to EnglishByEar! You can now log in.",
+        description: "Welcome to Verbavox! Please check your email to verify your account, then you can log in.",
       })
 
+      // Clear the form
+      setEmail("")
+      setPassword("")
+      setUsername("")
+
+      // Redirect to login page
       router.push("/login")
     } catch (error: any) {
+      console.error("Registration error:", error)
       toast({
         title: "Registration failed",
         description: error.message || "Please check your information and try again.",
@@ -78,13 +92,13 @@ export default function RegisterPage() {
   return (
     <div className="container flex h-screen w-screen flex-col items-center justify-center">
       <Link href="/" className="absolute left-4 top-4 md:left-8 md:top-8 flex items-center gap-2">
-        <Image src={"/logo.png"} alt="logo" height={40} width={40}/>
-        <span className="text-xl font-bold">EnglishByEar</span>
+        <Headphones className="h-6 w-6 text-primary" />
+        <span className="text-xl font-bold">Verbavox</span>
       </Link>
       <Card className="w-full max-w-md">
         <CardHeader className="space-y-1">
           <CardTitle className="text-2xl">Create an account</CardTitle>
-          <CardDescription>Enter your information to create a EnglishByEar account</CardDescription>
+          <CardDescription>Enter your information to create a Verbavox account</CardDescription>
         </CardHeader>
         <form onSubmit={handleRegister}>
           <CardContent className="grid gap-4">
@@ -138,4 +152,3 @@ export default function RegisterPage() {
     </div>
   )
 }
-

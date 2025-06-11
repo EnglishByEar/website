@@ -149,7 +149,7 @@ export default function SettingsPage() {
           <Card>
             <CardHeader>
               <CardTitle>Profile Information</CardTitle>
-              <CardDescription>Update your profile information and how others see you on EnglishByEar</CardDescription>
+              <CardDescription>Update your profile information and how others see you on Verbavox</CardDescription>
             </CardHeader>
             <form onSubmit={handleProfileUpdate}>
               <CardContent className="space-y-6">
@@ -238,7 +238,7 @@ export default function SettingsPage() {
           <Card>
             <CardHeader>
               <CardTitle>Preferences</CardTitle>
-              <CardDescription>Customize your experience on EnglishByEar</CardDescription>
+              <CardDescription>Customize your experience on Verbavox</CardDescription>
             </CardHeader>
             <CardContent className="space-y-6">
               <div className="space-y-4">
@@ -375,4 +375,3 @@ export default function SettingsPage() {
     </div>
   )
 }
-

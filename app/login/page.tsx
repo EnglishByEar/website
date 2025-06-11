@@ -12,7 +12,6 @@ import { Label } from "@/components/ui/label"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import { Headphones } from "lucide-react"
 import { useToast } from "@/hooks/use-toast"
-import Image from "next/image"
 
 export default function LoginPage() {
   const [email, setEmail] = useState("")
@@ -31,7 +30,7 @@ export default function LoginPage() {
         throw new Error("Supabase client not initialized")
       }
 
-      const { error } = await supabase.auth.signInWithPassword({
+      const { data: authData, error } = await supabase.auth.signInWithPassword({
         email,
         password,
       })
@@ -40,9 +39,32 @@ export default function LoginPage() {
         throw error
       }
 
+      // Check if profile exists, create if it doesn't
+      if (authData.user) {
+        const { data: profile, error: profileError } = await supabase
+          .from("profiles")
+          .select("*")
+          .eq("id", authData.user.id)
+          .single()
+
+        if (profileError && profileError.code === "PGRST116") {
+          // Profile doesn't exist, create it
+          const { error: createProfileError } = await supabase.from("profiles").insert({
+            id: authData.user.id,
+            username: authData.user.user_metadata?.username || authData.user.email?.split("@")[0] || "user",
+            email: authData.user.email || "",
+            created_at: new Date().toISOString(),
+          })
+
+          if (createProfileError) {
+            console.error("Error creating profile:", createProfileError)
+          }
+        }
+      }
+
       toast({
         title: "Login successful",
-        description: "Welcome back to EnglishByEar!",
+        description: "Welcome back to Verbavox!",
       })
 
       router.push("/dashboard")
@@ -60,8 +82,8 @@ export default function LoginPage() {
   return (
     <div className="container flex h-screen w-screen flex-col items-center justify-center">
       <Link href="/" className="absolute left-4 top-4 md:left-8 md:top-8 flex items-center gap-2">
-        <Image src={"/logo.png"} alt="logo" height={40} width={40}/>
-        <span className="text-xl font-bold">EnglishByEar</span>
+        <Headphones className="h-6 w-6 text-primary" />
+        <span className="text-xl font-bold">Verbavox</span>
       </Link>
       <Card className="w-full max-w-md">
         <CardHeader className="space-y-1">
@@ -113,4 +135,3 @@ export default function LoginPage() {
     </div>
   )
 }
-
