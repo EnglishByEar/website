@@ -28,6 +28,7 @@ export default function ExercisePage({ params }: { params: { id: string } }) {
   const [exercise, setExercise] = useState<any>(null)
   const audioRef = useRef<HTMLAudioElement | null>(null)
   const intervalRef = useRef<NodeJS.Timeout | null>(null)
+  const [audioAvailable, setAudioAvailable] = useState(false)
 
   useEffect(() => {
     const fetchExercise = async () => {
@@ -36,20 +37,62 @@ export default function ExercisePage({ params }: { params: { id: string } }) {
       try {
         const { data, error } = await supabase.from("exercises").select("*").eq("id", params.id).single()
 
-        if (error) throw error
+        if (error) {
+          // Table missing, bad id syntax, or no row -- fall back to mock content.
+          const safeToMock =
+            error.code === "42P01" ||
+            error.code === "22P02" ||
+            error.code === "PGRST116" ||
+            error.message?.includes("does not exist")
 
-        setExercise(data)
-      } catch (error) {
-        console.error("Error fetching exercise:", error)
-        // Fallback to mock data if fetch fails
-        setExercise({
-          id: params.id,
-          title: "Travel Vocabulary",
-          difficulty: "Simple",
-          category: "Travel",
-          duration: "3-4 min",
-          text: "I'm planning a trip to Japan next month. I've already booked my flight and hotel. I'll be staying in Tokyo for a week, and then I'll visit Kyoto for three days. I'm really excited about trying the local food and visiting some temples. I need to pack light because I'll be using public transportation a lot. Do you have any recommendations for places to visit in Japan?",
-        })
+          if (!safeToMock) {
+            throw error
+          }
+        }
+
+        if (data) {
+          setExercise(data)
+          return
+        }
+
+        // ---- MOCK EXERCISE FALLBACK ----
+        const mockExercises = {
+          "1": {
+            id: 1,
+            title: "Travel Vocabulary",
+            difficulty: "Simple",
+            category: "Travel",
+            duration: "3-4 min",
+            text: "I'm planning a trip to Japan next month. I've already booked my flight and hotel. I'll be staying in Tokyo for a week, and then I'll visit Kyoto for three days. I'm really excited about trying the local food and visiting some temples. I need to pack light because I'll be using public transportation a lot. Do you have any recommendations for places to visit in Japan?",
+          },
+          "2": {
+            id: 2,
+            title: "Science Documentary",
+            difficulty: "Advanced",
+            category: "Science",
+            duration: "6-8 min",
+            text: "Climate change represents one of the most significant challenges facing humanity in the twenty-first century. The scientific consensus indicates that global temperatures have risen by approximately 1.1 degrees Celsius since pre-industrial times, primarily due to increased concentrations of greenhouse gases in the atmosphere. These gases, including carbon dioxide, methane, and nitrous oxide, trap heat from the sun and prevent it from escaping back into space, creating what scientists call the greenhouse effect.",
+          },
+          "3": {
+            id: 3,
+            title: "Casual Conversation",
+            difficulty: "Medium",
+            category: "Lifestyle",
+            duration: "4-5 min",
+            text: "Hey Sarah, how was your weekend? I heard you went to that new restaurant downtown. Oh, it was amazing! The food was incredible, and the atmosphere was so cozy. We had to wait about thirty minutes for a table, but it was totally worth it. I ordered the salmon with roasted vegetables, and my partner had the pasta with mushroom sauce. For dessert, we shared the chocolate cake, which was absolutely divine. You should definitely try it sometime.",
+          },
+          daily: {
+            id: "daily",
+            title: "Business Communication",
+            difficulty: "Medium",
+            category: "Business",
+            duration: "5-6 min",
+            text: "Good morning everyone, and thank you for joining today's quarterly review meeting. As we can see from the presentation, our sales figures have exceeded expectations by fifteen percent this quarter. The marketing campaign we launched in September has been particularly successful, generating a twenty-three percent increase in customer engagement across all digital platforms. However, we still need to address some challenges in our supply chain management to ensure we can meet the growing demand for our products.",
+          },
+        }
+
+        const mockExercise = mockExercises[params.id as keyof typeof mockExercises] || mockExercises["1"]
+        setExercise(mockExercise)
       } finally {
         setLoading(false)
       }
@@ -80,37 +123,90 @@ export default function ExercisePage({ params }: { params: { id: string } }) {
     return { accuracy, mistakes, totalWords }
   }
 
-  useEffect(() => {
-    // Create audio element
-    audioRef.current = new Audio("/placeholder.mp3") // This would be a real audio file in production
+  // Save to local storage with proper user separation
+  const saveToLocalStorage = (results: any) => {
+    try {
+      const storageKey = `englishbyear_results_${user?.id || "anonymous"}`
+      const existingResults = JSON.parse(localStorage.getItem(storageKey) || "[]")
 
-    // Set up event listeners
-    const audio = audioRef.current
-
-    const updateProgress = () => {
-      if (audio && audio.duration) {
-        setProgress((audio.currentTime / audio.duration) * 100)
+      const newResult = {
+        id: Date.now(),
+        user_id: user?.id || "anonymous",
+        exercise_id: exercise.id,
+        exercise_title: exercise.title,
+        exercise_difficulty: exercise.difficulty,
+        exercise_category: exercise.category,
+        user_text: userText,
+        accuracy: results.accuracy,
+        mistakes: results.mistakes,
+        completed_at: new Date().toISOString(),
       }
+
+      existingResults.unshift(newResult) // Add to beginning
+
+      // Keep only last 50 results per user
+      if (existingResults.length > 50) {
+        existingResults.splice(50)
+      }
+
+      localStorage.setItem(storageKey, JSON.stringify(existingResults))
+
+      // Also update the global storage for backward compatibility
+      const globalResults = JSON.parse(localStorage.getItem("englishbyear_results") || "[]")
+      globalResults.unshift(newResult)
+      if (globalResults.length > 200) {
+        // Keep more in global storage
+        globalResults.splice(200)
+      }
+      localStorage.setItem("englishbyear_results", JSON.stringify(globalResults))
+
+      console.log(`Saved result for user ${user?.id?.substring(0, 8)}... to both storages`)
+      return true
+    } catch (error) {
+      console.error("Error saving to localStorage:", error)
+      return false
+    }
+  }
+
+  // Create / update the audio element whenever we have an exercise with audio
+  useEffect(() => {
+    // clean-up whatever was there before
+    if (audioRef.current) {
+      audioRef.current.pause()
+      audioRef.current.src = ""
+      audioRef.current.load()
     }
 
-    audio.addEventListener("timeupdate", updateProgress)
-    audio.addEventListener("ended", () => {
-      setIsPlaying(false)
-      setProgress(0)
-    })
+    if (!exercise?.audio_url) {
+      setAudioAvailable(false)
+      return
+    }
 
-    return () => {
-      audio.removeEventListener("timeupdate", updateProgress)
-      audio.removeEventListener("ended", () => {
+    try {
+      const audio = new Audio(exercise.audio_url)
+      audioRef.current = audio
+      setAudioAvailable(true)
+
+      const updateProgress = () => {
+        if (audio.duration) {
+          setProgress((audio.currentTime / audio.duration) * 100)
+        }
+      }
+
+      audio.addEventListener("timeupdate", updateProgress)
+      audio.addEventListener("ended", () => {
         setIsPlaying(false)
         setProgress(0)
       })
 
-      if (intervalRef.current) {
-        clearInterval(intervalRef.current)
+      return () => {
+        audio.removeEventListener("timeupdate", updateProgress)
       }
+    } catch {
+      // If the URL is bad we just disable audio controls
+      setAudioAvailable(false)
     }
-  }, [])
+  }, [exercise])
 
   useEffect(() => {
     if (audioRef.current) {
@@ -131,21 +227,19 @@ export default function ExercisePage({ params }: { params: { id: string } }) {
   }, [muted])
 
   const togglePlay = () => {
-    if (audioRef.current) {
-      if (isPlaying) {
-        audioRef.current.pause()
-      } else {
-        audioRef.current.play().catch((error) => {
-          toast({
-            title: "Audio Error",
-            description: "There was a problem playing the audio. Please try again.",
-            variant: "destructive",
-          })
-          console.error("Audio playback error:", error)
+    if (!audioAvailable || !audioRef.current) return
+    if (isPlaying) {
+      audioRef.current.pause()
+    } else {
+      audioRef.current.play().catch(() => {
+        toast({
+          title: "Audio Error",
+          description: "Unable to play this audio file.",
+          variant: "destructive",
         })
-      }
-      setIsPlaying(!isPlaying)
+      })
     }
+    setIsPlaying(!isPlaying)
   }
 
   const resetExercise = () => {
@@ -160,6 +254,7 @@ export default function ExercisePage({ params }: { params: { id: string } }) {
     setProgress(0)
   }
 
+  // ----- submit & persist results ------------------------------------------
   const handleSubmit = async () => {
     if (userText.trim() === "") {
       toast({
@@ -175,8 +270,12 @@ export default function ExercisePage({ params }: { params: { id: string } }) {
 
     const results = calculateResults()
 
-    // Save results to database if user is logged in and supabase is available
-    if (user && supabase && exercise) {
+    // Keep track of where we managed to store the data
+    let savedToDatabase = false
+    let savedToLocalStorage = false
+
+    // ---------- 1) Try Supabase first --------------------------------------
+    if (user && supabase && typeof exercise.id === "number") {
       try {
         const { error } = await supabase.from("exercise_results").insert({
           user_id: user.id,
@@ -187,25 +286,67 @@ export default function ExercisePage({ params }: { params: { id: string } }) {
           completed_at: new Date().toISOString(),
         })
 
-        if (error) throw error
+        if (error) {
+          // Supabase PostgrestError fields are non-enumerable – log them manually.
+          if (error) {
+            /* eslint-disable no-console */
+            console.error("Supabase insert error:", {
+              code: (error as any).code,
+              message: (error as any).message,
+              details: (error as any).details,
+              hint: (error as any).hint,
+            })
+            /* eslint-enable no-console */
+          }
 
-        toast({
-          title: "Exercise completed!",
-          description: `You scored ${results.accuracy}% accuracy. Results saved.`,
-        })
-      } catch (error) {
-        console.error("Error saving results:", error)
-        toast({
-          title: "Exercise completed!",
-          description: `You scored ${results.accuracy}% accuracy. Results could not be saved.`,
-        })
+          // If the table is missing or RLS blocks us, switch to local storage
+          const missingTable = error.code === "42P01" || error.message?.includes("does not exist") // relation missing
+          const rlsDenied = error.code === "42501" || /permission|rls/i.test(error.message || "")
+
+          if (!missingTable && !rlsDenied) {
+            // Unknown DB error → rethrow so we hit the global catch
+            throw error
+          }
+        } else {
+          savedToDatabase = true
+          console.log(`Saved exercise result to database for user ${user.id.substring(0, 8)}...`)
+        }
+      } catch (err) {
+        // Unknown DB error, we'll still try local fallback
+        console.error("Unexpected DB error when saving results:", err)
       }
-    } else {
-      toast({
-        title: "Exercise completed!",
-        description: `You scored ${results.accuracy}% accuracy.`,
-      })
     }
+
+    // ---------- 2) Always save to localStorage as a backup ------------------
+    if (!savedToDatabase) {
+      savedToLocalStorage = saveToLocalStorage(results)
+    }
+
+    // ---------- 3) Show user feedback --------------------------------------
+    toast({
+      title: "Exercise completed!",
+      description:
+        `You scored ${results.accuracy}% accuracy.` +
+        (savedToDatabase
+          ? "  Results were saved to your profile."
+          : savedToLocalStorage
+            ? "  Results were saved locally on this device."
+            : "  Results could not be saved."),
+      variant: savedToDatabase || savedToLocalStorage ? "default" : "destructive",
+    })
+
+    // ---------- 4) Tell the dashboard to refresh ---------------------------
+    window.dispatchEvent(
+      new CustomEvent("exerciseCompleted", {
+        detail: {
+          exerciseId: exercise.id,
+          accuracy: results.accuracy,
+          savedToDatabase,
+          savedToLocalStorage,
+          userId: user?.id,
+        },
+      }),
+    )
   }
 
   if (loading) {
@@ -260,40 +401,51 @@ export default function ExercisePage({ params }: { params: { id: string } }) {
           <div className="space-y-4">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-2">
-                <Button variant="outline" size="icon" onClick={togglePlay} disabled={submitted}>
-                  {isPlaying ? <Pause className="h-4 w-4" /> : <Play className="h-4 w-4" />}
-                </Button>
-                <Button variant="outline" size="icon" onClick={() => setMuted(!muted)} disabled={submitted}>
-                  {muted ? <VolumeX className="h-4 w-4" /> : <Volume2 className="h-4 w-4" />}
-                </Button>
-                <Button variant="outline" size="icon" onClick={resetExercise}>
-                  <RotateCcw className="h-4 w-4" />
-                </Button>
+                {audioAvailable ? (
+                  <>
+                    <Button variant="outline" size="icon" onClick={togglePlay} disabled={submitted}>
+                      {isPlaying ? <Pause className="h-4 w-4" /> : <Play className="h-4 w-4" />}
+                    </Button>
+                    <Button variant="outline" size="icon" onClick={() => setMuted(!muted)} disabled={submitted}>
+                      {muted ? <VolumeX className="h-4 w-4" /> : <Volume2 className="h-4 w-4" />}
+                    </Button>
+                    <Button variant="outline" size="icon" onClick={resetExercise}>
+                      <RotateCcw className="h-4 w-4" />
+                    </Button>
+                  </>
+                ) : (
+                  <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                    <AlertCircle className="h-4 w-4" />
+                    <span>Audio not available - read the text below after submitting</span>
+                  </div>
+                )}
               </div>
-              <div className="flex items-center gap-2">
-                <span className="text-sm text-muted-foreground">Speed:</span>
-                <div className="w-32">
-                  <Slider
-                    value={[playbackRate * 100]}
-                    min={50}
-                    max={150}
-                    step={25}
-                    onValueChange={(value) => setPlaybackRate(value[0] / 100)}
-                    disabled={submitted}
-                  />
+              {audioAvailable && (
+                <div className="flex items-center gap-2">
+                  <span className="text-sm text-muted-foreground">Speed:</span>
+                  <div className="w-32">
+                    <Slider
+                      value={[playbackRate * 100]}
+                      min={50}
+                      max={150}
+                      step={25}
+                      onValueChange={(value) => setPlaybackRate(value[0] / 100)}
+                      disabled={submitted}
+                    />
+                  </div>
+                  <span className="text-sm">{playbackRate}x</span>
                 </div>
-                <span className="text-sm">{playbackRate}x</span>
-              </div>
+              )}
             </div>
-            <Progress value={progress} />
+            {audioAvailable && <Progress value={progress} />}
           </div>
 
-          {showText ? (
+          {showText && (
             <div className="rounded-lg border p-4">
               <h3 className="mb-2 font-medium">Original Text:</h3>
-              <p>{exercise.text}</p>
+              <p className="leading-relaxed">{exercise.text}</p>
             </div>
-          ) : null}
+          )}
 
           <div>
             <Textarea
@@ -311,7 +463,7 @@ export default function ExercisePage({ params }: { params: { id: string } }) {
             )}
           </div>
 
-          {submitted && results ? (
+          {submitted && results && (
             <div className="rounded-lg border p-4 space-y-4">
               <h3 className="font-medium">Your Results:</h3>
               <div className="grid gap-4 sm:grid-cols-3">
@@ -331,8 +483,16 @@ export default function ExercisePage({ params }: { params: { id: string } }) {
                   <p className="text-2xl font-bold">{results.totalWords}</p>
                 </div>
               </div>
+
+              {/* Show comparison */}
+              <div className="space-y-2">
+                <h4 className="text-sm font-medium">Your Answer:</h4>
+                <div className="p-3 bg-muted rounded-md">
+                  <p className="text-sm">{userText}</p>
+                </div>
+              </div>
             </div>
-          ) : null}
+          )}
         </CardContent>
         <CardFooter className="flex justify-between">
           {!submitted ? (

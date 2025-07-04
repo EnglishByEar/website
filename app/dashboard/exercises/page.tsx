@@ -27,7 +27,17 @@ export default function ExercisesPage() {
       try {
         const { data, error } = await supabase.from("exercises").select("*").order("id", { ascending: true })
 
-        if (error) throw error
+        if (error) {
+          // The exercises table hasn't been created yet.
+          // Fall back to mock data so the page still renders.
+          if (error.code === "42P01" || error.message?.includes("does not exist")) {
+            console.warn(
+              "exercises table not found. Run the SQL migration to create it, or continue using mock data while prototyping.",
+            )
+            throw { handled: true } // jump to catch → mock data
+          }
+          throw error
+        }
 
         // Group exercises by difficulty
         const grouped = {
@@ -37,8 +47,11 @@ export default function ExercisesPage() {
         }
 
         setExercises(grouped)
-      } catch (error) {
-        console.error("Error fetching exercises:", error)
+      } catch (error: any) {
+        // Skip logging for the handled 'table does not exist' case
+        if (!error?.handled) {
+          console.error("Error fetching exercises:", error)
+        }
         // Fallback to mock data if fetch fails
         setExercises({
           simple: [

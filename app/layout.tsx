@@ -9,8 +9,8 @@ import SupabaseProvider from "@/components/supabase-provider"
 const inter = Inter({ subsets: ["latin"] })
 
 export const metadata: Metadata = {
-  title: "Verbavox - English Listening Practice",
-  description: "Practice your English listening skills with Verbavox",
+  title: "EnglishByEar - English Listening Practice",
+  description: "Practice your English listening skills with EnglishByEar",
     generator: 'v0.dev'
 }
 
@@ -22,7 +22,7 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <body className={`${inter.className} min-h-screen bg-background`}>
-        <ThemeProvider>
+        <ThemeProvider attribute="class" defaultTheme="dark" enableSystem>
           <SupabaseProvider>
             {children}
             <Toaster />

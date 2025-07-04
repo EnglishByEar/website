@@ -2,7 +2,7 @@
 
 import type React from "react"
 
-import { useState, useEffect } from "react"
+import { useState, useEffect, useRef } from "react"
 import { useSupabase } from "@/components/supabase-provider"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -25,6 +25,7 @@ export default function SettingsPage() {
     fullName: "",
     bio: "",
     nativeLanguage: "english",
+    avatar_url: "",
   })
   const [preferences, setPreferences] = useState({
     darkMode: true,
@@ -34,6 +35,9 @@ export default function SettingsPage() {
     defaultDifficulty: "simple",
   })
 
+  const [avatarUploading, setAvatarUploading] = useState(false)
+  const fileInputRef = useRef<HTMLInputElement>(null)
+
   useEffect(() => {
     const fetchProfile = async () => {
       if (!user || !supabase) return
@@ -41,7 +45,13 @@ export default function SettingsPage() {
       try {
         const { data, error } = await supabase.from("profiles").select("*").eq("id", user.id).single()
 
-        if (error) throw error
+        if (error) {
+          if (error.code === "42P01" || error.message?.includes("does not exist")) {
+            console.warn("profiles table not found – skipping profile fetch.")
+            return
+          }
+          throw error
+        }
 
         setProfile({
           username: data.username || "",
@@ -49,6 +59,7 @@ export default function SettingsPage() {
           fullName: data.full_name || "",
           bio: data.bio || "",
           nativeLanguage: data.native_language || "english",
+          avatar_url: data.avatar_url || "",
         })
 
         // In a real app, you would fetch preferences from the database
@@ -133,6 +144,102 @@ export default function SettingsPage() {
     })
   }
 
+  const handleAvatarUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0]
+    if (!file || !user || !supabase) return
+
+    // Validate file type
+    if (!file.type.startsWith("image/")) {
+      toast({
+        title: "Invalid file type",
+        description: "Please select an image file (JPG, PNG, GIF, etc.)",
+        variant: "destructive",
+      })
+      return
+    }
+
+    // Validate file size (max 5MB)
+    if (file.size > 5 * 1024 * 1024) {
+      toast({
+        title: "File too large",
+        description: "Please select an image smaller than 5MB",
+        variant: "destructive",
+      })
+      return
+    }
+
+    setAvatarUploading(true)
+
+    try {
+      // Create a unique filename and put it in the user-id folder
+      const fileExt = file.name.split(".").pop()
+      const fileName = `avatar-${Date.now()}.${fileExt}`
+      const filePath = `${user.id}/${fileName}` // <- satisfies RLS policy
+
+      // Upload to Supabase Storage
+      const { error: uploadError } = await supabase.storage.from("avatars").upload(filePath, file)
+
+      if (uploadError) {
+        // If bucket doesn't exist, show helpful message
+        if (uploadError.message.includes("Bucket not found")) {
+          toast({
+            title: "Storage not configured",
+            description: "Avatar uploads require Supabase Storage setup. Contact your administrator.",
+            variant: "destructive",
+          })
+          return
+        }
+        throw uploadError
+      }
+
+      // Get the public URL
+      const {
+        data: { publicUrl },
+      } = supabase.storage.from("avatars").getPublicUrl(filePath)
+
+      // Update user profile with new avatar URL
+      const { error: updateError } = await supabase
+        .from("profiles")
+        .update({
+          avatar_url: publicUrl,
+          updated_at: new Date().toISOString(),
+        })
+        .eq("id", user.id)
+
+      if (updateError) {
+        // If profiles table doesn't exist, just show success anyway
+        if (!(updateError.code === "42P01" || updateError.message?.includes("does not exist"))) {
+          throw updateError
+        }
+      }
+
+      // Update local profile state
+      setProfile((prev) => ({ ...prev, avatar_url: publicUrl }))
+
+      toast({
+        title: "Avatar updated",
+        description: "Your profile picture has been updated successfully.",
+      })
+    } catch (error: any) {
+      console.error("Avatar upload error:", error)
+      toast({
+        title: "Upload failed",
+        description: error.message || "There was an error uploading your avatar.",
+        variant: "destructive",
+      })
+    } finally {
+      setAvatarUploading(false)
+      // Clear the file input
+      if (fileInputRef.current) {
+        fileInputRef.current.value = ""
+      }
+    }
+  }
+
+  const triggerFileInput = () => {
+    fileInputRef.current?.click()
+  }
+
   return (
     <div className="grid gap-6">
       <div className="flex items-center justify-between">
@@ -149,19 +256,32 @@ export default function SettingsPage() {
           <Card>
             <CardHeader>
               <CardTitle>Profile Information</CardTitle>
-              <CardDescription>Update your profile information and how others see you on Verbavox</CardDescription>
+              <CardDescription>Update your profile information and how others see you on EnglishByEar</CardDescription>
             </CardHeader>
             <form onSubmit={handleProfileUpdate}>
               <CardContent className="space-y-6">
                 <div className="flex flex-col gap-6 sm:flex-row">
                   <div className="flex flex-col items-center gap-2">
                     <Avatar className="h-24 w-24">
-                      <AvatarImage src="/placeholder.svg?height=96&width=96" alt={profile.username} />
+                      <AvatarImage
+                        src={profile.avatar_url || "/placeholder.svg?height=96&width=96"}
+                        alt={profile.username}
+                      />
                       <AvatarFallback>{profile.username.charAt(0).toUpperCase()}</AvatarFallback>
                     </Avatar>
-                    <Button variant="outline" size="sm">
-                      Change Avatar
+                    <Button variant="outline" size="sm" onClick={triggerFileInput} disabled={avatarUploading}>
+                      {avatarUploading ? "Uploading..." : "Change Avatar"}
                     </Button>
+                    <input
+                      ref={fileInputRef}
+                      type="file"
+                      accept="image/*"
+                      onChange={handleAvatarUpload}
+                      className="hidden"
+                    />
+                    <p className="text-xs text-muted-foreground text-center max-w-[200px]">
+                      JPG, PNG or GIF. Max size 5MB.
+                    </p>
                   </div>
                   <div className="grid flex-1 gap-4">
                     <div className="grid gap-2">
@@ -238,7 +358,7 @@ export default function SettingsPage() {
           <Card>
             <CardHeader>
               <CardTitle>Preferences</CardTitle>
-              <CardDescription>Customize your experience on Verbavox</CardDescription>
+              <CardDescription>Customize your experience on EnglishByEar</CardDescription>
             </CardHeader>
             <CardContent className="space-y-6">
               <div className="space-y-4">

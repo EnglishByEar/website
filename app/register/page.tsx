@@ -51,23 +51,26 @@ export default function RegisterPage() {
         throw new Error("User registration failed")
       }
 
-      // Create a profile in the profiles table using the user ID from the signup response
-      const { error: profileError } = await supabase.from("profiles").insert({
-        id: authData.user.id,
-        username,
-        email,
-        created_at: new Date().toISOString(),
-      })
+      // Create a profile row only if we already have a session
+      if (authData.session && authData.user) {
+        const { error: profileError } = await supabase.from("profiles").insert({
+          id: authData.user.id,
+          username,
+          email,
+          created_at: new Date().toISOString(),
+        })
 
-      if (profileError) {
-        console.error("Profile creation error:", profileError)
-        // Don't throw here - the user account was created successfully
-        // The profile can be created later when they first log in
+        if (profileError) {
+          // Table might not exist yet – safe to ignore, login flow will handle it
+          if (!(profileError.code === "42P01" || profileError.message?.includes("does not exist"))) {
+            console.error("Profile creation error:", profileError)
+          }
+        }
       }
 
       toast({
         title: "Registration successful",
-        description: "Welcome to Verbavox! Please check your email to verify your account, then you can log in.",
+        description: "Welcome to EnglishByEar! Please check your email to verify your account, then you can log in.",
       })
 
       // Clear the form
@@ -93,12 +96,12 @@ export default function RegisterPage() {
     <div className="container flex h-screen w-screen flex-col items-center justify-center">
       <Link href="/" className="absolute left-4 top-4 md:left-8 md:top-8 flex items-center gap-2">
         <Headphones className="h-6 w-6 text-primary" />
-        <span className="text-xl font-bold">Verbavox</span>
+        <span className="text-xl font-bold">EnglishByEar</span>
       </Link>
       <Card className="w-full max-w-md">
         <CardHeader className="space-y-1">
           <CardTitle className="text-2xl">Create an account</CardTitle>
-          <CardDescription>Enter your information to create a Verbavox account</CardDescription>
+          <CardDescription>Enter your information to create a EnglishByEar account</CardDescription>
         </CardHeader>
         <form onSubmit={handleRegister}>
           <CardContent className="grid gap-4">

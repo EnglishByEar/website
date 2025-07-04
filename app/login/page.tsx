@@ -64,7 +64,7 @@ export default function LoginPage() {
 
       toast({
         title: "Login successful",
-        description: "Welcome back to Verbavox!",
+        description: "Welcome back to EnglishByEar!",
       })
 
       router.push("/dashboard")
@@ -83,7 +83,7 @@ export default function LoginPage() {
     <div className="container flex h-screen w-screen flex-col items-center justify-center">
       <Link href="/" className="absolute left-4 top-4 md:left-8 md:top-8 flex items-center gap-2">
         <Headphones className="h-6 w-6 text-primary" />
-        <span className="text-xl font-bold">Verbavox</span>
+        <span className="text-xl font-bold">EnglishByEar</span>
       </Link>
       <Card className="w-full max-w-md">
         <CardHeader className="space-y-1">

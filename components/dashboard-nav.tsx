@@ -56,7 +56,7 @@ export default function DashboardNav() {
         <div className="flex items-center gap-2">
           <Link href="/dashboard" className="flex items-center gap-2">
             <Headphones className="h-6 w-6 text-primary" />
-            <span className="text-xl font-bold">Verbavox</span>
+            <span className="text-xl font-bold">EnglishByEar</span>
           </Link>
         </div>
 
