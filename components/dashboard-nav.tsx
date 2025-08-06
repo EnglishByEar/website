@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import Link from "next/link"
 import { usePathname, useRouter } from "next/navigation"
 import { useSupabase } from "@/components/supabase-provider"
@@ -23,6 +23,29 @@ export default function DashboardNav() {
   const { supabase, user } = useSupabase()
   const { toast } = useToast()
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
+  const [avatarUrl, setAvatarUrl] = useState<string | null>(null)
+
+  useEffect(() => {
+    const fetchAvatar = async () => {
+      if (!user || !supabase) return
+
+      try {
+        const { data, error } = await supabase
+          .from("profiles")
+          .select("avatar_url")
+          .eq("id", user.id)
+          .single()
+
+        if (error) throw error
+
+        setAvatarUrl(data?.avatar_url || null)
+      } catch (error) {
+        console.error("Error fetching avatar:", error)
+      }
+    }
+
+    fetchAvatar()
+  }, [supabase, user])
 
   const handleLogout = async () => {
     if (!supabase) {
@@ -83,9 +106,14 @@ export default function DashboardNav() {
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <Button variant="ghost" className="relative h-8 w-8 rounded-full">
-                <Avatar className="h-8 w-8">
-                  <AvatarImage src="/placeholder.svg?height=32&width=32" alt={user?.email || ""} />
-                  <AvatarFallback>{user?.email?.charAt(0).toUpperCase() || "U"}</AvatarFallback>
+                <Avatar className="h-10 w-10">
+                  <AvatarImage
+                    src={avatarUrl || "/placeholder.svg?height=96&width=96"}
+                    alt="User Avatar"
+                  />
+                  <AvatarFallback>
+                    {user?.email?.charAt(0).toUpperCase() ?? "?"}
+                  </AvatarFallback>
                 </Avatar>
               </Button>
             </DropdownMenuTrigger>
