@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useRef, useEffect } from "react"
+import { useState, useRef, useEffect, use } from "react"
 import { useRouter } from "next/navigation"
 import { useSupabase } from "@/components/supabase-provider"
 import { Button } from "@/components/ui/button"
@@ -12,8 +12,9 @@ import { Progress } from "@/components/ui/progress"
 import { Play, Pause, RotateCcw, Volume2, VolumeX, AlertCircle } from "lucide-react"
 import { useToast } from "@/hooks/use-toast"
 
-export default function ExercisePage({ params }: { params: { id: string } }) {
+export default function ExercisePage({ params }: { params: Promise<{ id: string }> }) {
   const router = useRouter()
+  const { id } = use(params)
   const { supabase, user } = useSupabase()
   const { toast } = useToast()
   const [isPlaying, setIsPlaying] = useState(false)
@@ -35,7 +36,7 @@ export default function ExercisePage({ params }: { params: { id: string } }) {
       if (!supabase) return
 
       try {
-        const { data, error } = await supabase.from("exercises").select("*").eq("id", params.id).single()
+        const { data, error } = await supabase.from("exercises").select("*").eq("id", id).single()
 
         if (error) {
           // Table missing, bad id syntax, or no row -- fall back to mock content.
@@ -91,7 +92,7 @@ export default function ExercisePage({ params }: { params: { id: string } }) {
           },
         }
 
-        const mockExercise = mockExercises[params.id as keyof typeof mockExercises] || mockExercises["1"]
+        const mockExercise = mockExercises[id as keyof typeof mockExercises] || mockExercises["1"]
         setExercise(mockExercise)
       } finally {
         setLoading(false)
@@ -99,7 +100,7 @@ export default function ExercisePage({ params }: { params: { id: string } }) {
     }
 
     fetchExercise()
-  }, [supabase, params.id])
+  }, [supabase, id])
 
   // Results calculation
   const calculateResults = () => {
