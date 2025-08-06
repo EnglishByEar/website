@@ -171,43 +171,49 @@ export default function ExercisePage({ params }: { params: Promise<{ id: string 
 
   // Create / update the audio element whenever we have an exercise with audio
   useEffect(() => {
-    // clean-up whatever was there before
-    if (audioRef.current) {
-      audioRef.current.pause()
-      audioRef.current.src = ""
-      audioRef.current.load()
+  // Reset audio
+  if (audioRef.current) {
+    audioRef.current.pause()
+    audioRef.current.src = ""
+    audioRef.current.load()
+    audioRef.current = null
+  }
+
+  if (!exercise?.audio_url) {
+    setAudioAvailable(false)
+    return
+  }
+
+  const audio = new Audio(exercise.audio_url)
+
+  audio.oncanplaythrough = () => {
+    audioRef.current = audio
+    setAudioAvailable(true)
+  }
+
+  audio.onerror = () => {
+    console.error("Failed to load audio:", exercise.audio_url)
+    setAudioAvailable(false)
+  }
+
+  const updateProgress = () => {
+    if (audio.duration) {
+      setProgress((audio.currentTime / audio.duration) * 100)
     }
+  }
 
-    if (!exercise?.audio_url) {
-      setAudioAvailable(false)
-      return
-    }
+  audio.addEventListener("timeupdate", updateProgress)
+  audio.addEventListener("ended", () => {
+    setIsPlaying(false)
+    setProgress(0)
+  })
 
-    try {
-      const audio = new Audio(exercise.audio_url)
-      audioRef.current = audio
-      setAudioAvailable(true)
-
-      const updateProgress = () => {
-        if (audio.duration) {
-          setProgress((audio.currentTime / audio.duration) * 100)
-        }
-      }
-
-      audio.addEventListener("timeupdate", updateProgress)
-      audio.addEventListener("ended", () => {
-        setIsPlaying(false)
-        setProgress(0)
-      })
-
-      return () => {
-        audio.removeEventListener("timeupdate", updateProgress)
-      }
-    } catch {
-      // If the URL is bad we just disable audio controls
-      setAudioAvailable(false)
-    }
-  }, [exercise])
+  return () => {
+    audio.removeEventListener("timeupdate", updateProgress)
+    audio.oncanplaythrough = null
+    audio.onerror = null
+  }
+}, [exercise])
 
   useEffect(() => {
     if (audioRef.current) {
