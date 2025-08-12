@@ -10,8 +10,7 @@ const inter = Inter({ subsets: ["latin"] })
 
 export const metadata: Metadata = {
   title: "EnglishByEar - English Listening Practice",
-  description: "Practice your English listening skills with EnglishByEar",
-    generator: 'v0.dev'
+  description: "Practice your English listening skills with EnglishByEar"
 }
 
 export default function RootLayout({
