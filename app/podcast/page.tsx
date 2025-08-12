@@ -5,6 +5,7 @@ import { Headphones } from 'lucide-react';
 import podcastData from '@/lib/podcast.json'
 import Link from 'next/link';
 import PodcastCard from '@/components/podcastCard';
+import { Episode } from '@/types/podcast';
 
 export default function Podcast() {
   const episodes = podcastData.episodes;
@@ -40,8 +41,8 @@ export default function Podcast() {
           </div>
         </section>
         <section className="container py-12 md:py-24 lg:py-32">
-          <div className="mx-auto flex max-w-[980px] flex-col items-center gap-4 text-center">
-            {episodes.map((episode) => (
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            {episodes.map((episode: Episode) => (
               <PodcastCard key={episode.id} episode={episode} />
             ))}
           </div>
