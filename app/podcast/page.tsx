@@ -1,10 +1,13 @@
 import React from 'react'
 import Head from "next/head";
 import podcastJsonLd from "@/data/podcastData";
-import { BarChart2, Clock, Headphones, Link, Trophy } from 'lucide-react';
-import { Button } from 'react-day-picker';
+import { Headphones } from 'lucide-react';
+import podcastData from '@/lib/podcast.json'
+import Link from 'next/link';
+import PodcastCard from '@/components/podcastCard';
 
 export default function Podcast() {
+  const episodes = podcastData.episodes;
   return (
     <>
       <Head>
@@ -34,6 +37,13 @@ export default function Podcast() {
               Every week for practical tips, engaging conversations, and cultural insights to help you speak English confidently.
             </p>
             
+          </div>
+        </section>
+        <section className="container py-12 md:py-24 lg:py-32">
+          <div className="mx-auto flex max-w-[980px] flex-col items-center gap-4 text-center">
+            {episodes.map((episode) => (
+              <PodcastCard key={episode.id} episode={episode} />
+            ))}
           </div>
         </section>
 

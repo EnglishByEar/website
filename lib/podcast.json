@@ -1,24 +1,28 @@
 {
   "title": "The English Learning Podcast",
   "description": "A weekly show that helps English learners improve their vocabulary, pronunciation, and confidence through practical tips and cultural insights.",
-  "coverImage": "https://www.EnglishByEar.com/images/podcast-cover.jpg",
+  "coverImage": "https://englishbyear.com/images/podcast-cover.jpg",
   "language": "en",
   "author": "Hosein Ghasemizade",
   "publisher": "English By Ear",
   "episodes": [
     {
+      "id": "episode-1",
       "title": "Episode 1: Mastering Small Talk in English",
       "description": "Learn how to start and keep a conversation going in English with common phrases and cultural tips.",
-      "url": "https://www.learnenglishpodcast.com/episode-1",
-      "audioUrl": "https://cdn.learnenglishpodcast.com/audio/episode-1.mp3",
+      "url": "https://www.EnglishByEar.com/episode-1",
+      "coverImage": "https://www.EnglishByEar.com/images/episode-1.jpg",
+      "audioUrl": "https://cdn.EnglishByEar.com/audio/episode-1.mp3",
       "datePublished": "2025-08-05",
       "duration": "22:00"
     },
     {
+      "id": "episode-2",
       "title": "Episode 2: 10 Common Mistakes English Learners Make",
       "description": "We discuss the most frequent grammar and pronunciation mistakes and how to avoid them.",
-      "url": "https://www.learnenglishpodcast.com/episode-2",
-      "audioUrl": "https://cdn.learnenglishpodcast.com/audio/episode-2.mp3",
+      "url": "https://www.EnglishByEar.com/episode-2",
+      "coverImage": "https://www.EnglishByEar.com/images/episode-2.jpg",
+      "audioUrl": "https://cdn.EnglishByEar.com/audio/episode-2.mp3",
       "datePublished": "2025-08-12",
       "duration": "25:00"
     }
