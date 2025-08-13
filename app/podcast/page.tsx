@@ -8,7 +8,7 @@ import PodcastCard from '@/components/podcastCard';
 import { Episode } from '@/types/podcast';
 
 export default function Podcast() {
-  const episodes = podcastData.episodes;
+  const episodes = podcastData;
   return (
     <>
       <Head>
