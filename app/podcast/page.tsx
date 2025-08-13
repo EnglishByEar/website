@@ -20,14 +20,7 @@ export default function Podcast() {
           dangerouslySetInnerHTML={{ __html: JSON.stringify(podcastJsonLd) }}
         />
       </Head>
-      <header className="sticky top-0 z-40 border-b bg-background">
-        <div className="container flex h-16 items-center justify-between py-4">
-          <div className="flex items-center gap-2">
-            <Headphones className="h-6 w-6 text-primary" />
-            <span className="text-xl font-bold">EnglishByEar</span>
-          </div>
-        </div>
-      </header>
+      
       <main className="flex-1">
         <section className="container py-12 md:py-24 lg:py-32">
           <div className="mx-auto flex max-w-[980px] flex-col items-center gap-4 text-center">
