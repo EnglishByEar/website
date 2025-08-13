@@ -1,5 +1,6 @@
 import Image from "next/image"
 import Link from "next/link"
+import defualtCover from "@/public/placeholder.svg"
 import type { Episode } from "@/types/podcast"
 
 export default function PodcastCard({ episode }: { episode: Episode }) {
@@ -7,7 +8,7 @@ export default function PodcastCard({ episode }: { episode: Episode }) {
     <Link href={`/podcast/${episode.id}`} className="block">
       <div className="bg-white rounded-3xl shadow-md overflow-hidden hover:shadow-lg transition-shadow">
         <Image
-          src={episode.coverImage || "/placeholder.svg"}
+          src={episode.coverImage || defualtCover}
           alt={episode.title}
           width={400}
           height={225}
