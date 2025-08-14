@@ -3,6 +3,7 @@ import { getPodcast, getAllPodcastIds } from "@/lib/podcast"
 import { notFound } from 'next/navigation';
 import Image from "next/image"
 import defualtCover from "@/public/placeholder.svg"
+import AudioPlayer from '@/components/AudioPlayer';
 
 
 export async function generateStaticParams() {
@@ -41,9 +42,12 @@ export default async function PodcastId(porps: any) {
                 <h3 className="truncate text-gray-600 text-xl font-semibold mb-2">{podcast?.title}</h3>
                 <p className="truncate text-gray-600">{podcast?.description}</p>
             </div>
+            <div className='mt-4'>
+              <AudioPlayer exercise={podcast?.audioUrl ? { audio_url: podcast.audioUrl } : null} />
+            </div>
         </section>
         <section className="container py-12 md:py-24 lg:py-32">
-        
+
         </section>    
     </main>
   )
