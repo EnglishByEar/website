@@ -20,7 +20,7 @@ export default function Podcast() {
           dangerouslySetInnerHTML={{ __html: JSON.stringify(podcastJsonLd) }}
         />
       </Head>
-      
+
       <main className="flex-1">
         <section className="container py-12 md:py-24 lg:py-32">
           <div className="mx-auto flex max-w-[980px] flex-col items-center gap-4 text-center">
@@ -30,7 +30,7 @@ export default function Podcast() {
             <p className="max-w-[750px] text-lg text-muted-foreground sm:text-xl">
               Every week for practical tips, engaging conversations, and cultural insights to help you speak English confidently.
             </p>
-            
+
           </div>
         </section>
         <section className="container py-12 md:py-24 lg:py-32">
@@ -41,8 +41,9 @@ export default function Podcast() {
           </div>
         </section>
 
-        
+
       </main>
+
     </>
   )
 }
