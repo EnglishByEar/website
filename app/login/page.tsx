@@ -10,13 +10,14 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
-import { Headphones } from "lucide-react"
+import { Headphones, EyeClosed, Eye } from "lucide-react"
 import { useToast } from "@/hooks/use-toast"
 
 export default function LoginPage() {
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
   const [loading, setLoading] = useState(false)
+  const [visible, setVisible] = useState(false)
   const router = useRouter()
   const { supabase } = useSupabase()
   const { toast } = useToast()
@@ -106,17 +107,28 @@ export default function LoginPage() {
             <div className="grid gap-2">
               <div className="flex items-center justify-between">
                 <Label htmlFor="password">Password</Label>
-                <Link href="/forgot-password" className="text-sm text-muted-foreground hover:underline">
-                  Forgot password?
-                </Link>
               </div>
               <Input
                 id="password"
-                type="password"
+                type={visible ? "text" : "password"}
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 required
               />
+              <div className="flex items-center justify-between">
+                <button
+                  type="button"
+                  onClick={() => setVisible((prev) => !prev)}
+                  aria-label={visible ? "Hide password" : "Show password"}
+                  aria-pressed={visible}
+                  className="p-2"
+                >
+                  {visible ? <EyeClosed size={18} /> : <Eye size={18} />}
+                </button>
+                <Link href="/forgot-password" className="text-sm text-muted-foreground hover:underline">
+                  Forgot password?
+                </Link>
+              </div>
             </div>
           </CardContent>
           <CardFooter className="flex flex-col gap-2">
