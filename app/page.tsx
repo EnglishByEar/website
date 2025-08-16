@@ -13,8 +13,11 @@ export default function Home() {
             <span className="text-xl font-bold">EnglishByEar</span>
           </div>
           <nav className="flex items-center gap-4">
+            <Link href="/podcast">
+              <Button variant="outline">Podcast</Button>
+            </Link>
             <Link href="/login">
-              <Button variant="ghost">Login</Button>
+              <Button variant="outline">Login</Button>
             </Link>
             <Link href="/register">
               <Button>Sign Up</Button>
