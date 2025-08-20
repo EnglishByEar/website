@@ -1,9 +1,29 @@
+"use client"
+
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
 import { Headphones, BarChart2, Trophy, Clock } from "lucide-react"
 import Footer from "@/components/footer"
+import { useSupabase } from "@/components/supabase-provider"
+import { useRouter } from "next/navigation"
+import { useEffect } from "react"
 
 export default function Home() {
+  const { supabase, user, isLoading } = useSupabase()
+  const router = useRouter()
+
+  const goToExercise = () => {
+    if (user) {
+      router.push("/dashboard/exercise")
+    } else {
+      router.push("/login")
+    }
+  }
+
+  if (isLoading) {
+    return <div className="flex h-screen items-center justify-center">Loading...</div>
+  }
+
   return (
     <div className="flex min-h-screen flex-col">
       <header className="sticky top-0 z-40 border-b bg-background">
@@ -122,7 +142,7 @@ export default function Home() {
                     <div className="h-4 w-full rounded bg-muted-foreground/20 mb-2" />
                     <div className="h-4 w-5/6 rounded bg-muted-foreground/20" />
                   </div>
-                  <Button className="w-full">Start Exercise</Button>
+                  <Button onClick={goToExercise} className="w-full">Start Exercise</Button>
                 </div>
               </div>
             </div>
