@@ -18,6 +18,7 @@ export default function RegisterPage() {
   const [password, setPassword] = useState("")
   const [username, setUsername] = useState("")
   const [loading, setLoading] = useState(false)
+  const [visible, setVisible] = useState(false)
   const router = useRouter()
   const { supabase } = useSupabase()
   const { toast } = useToast()
@@ -131,7 +132,7 @@ export default function RegisterPage() {
               <Label htmlFor="password">Password</Label>
               <Input
                 id="password"
-                type="password"
+                type={visible ? "text" : "password"}
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 required
