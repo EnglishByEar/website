@@ -18,6 +18,30 @@ export default function ForgotPassword() {
     const { supabase } = useSupabase()
     const { toast } = useToast()
 
+    const handleForgotPassword = async (e: React.FormEvent<HTMLFormElement>) => {
+        e.preventDefault()
+        setLoading(true)
+
+        const { error } = await supabase.auth.resetPasswordForEmail(email, {
+            redirectTo: `${window.location.origin}/reset-password`, // 👈 adjust path if needed
+        })
+
+        if (error) {
+            toast({
+                title: "Error",
+                description: error.message,
+                variant: "destructive",
+            })
+        } else {
+            toast({
+                title: "Email sent",
+                description: "Check your inbox for the password reset link.",
+            })
+        }
+
+        setLoading(false)
+    }
+
     return (
         <div className="container flex h-screen w-screen flex-col items-center justify-center">
             <Link href="/" className="absolute left-4 top-4 md:left-8 md:top-8 flex items-center gap-2">
@@ -29,7 +53,7 @@ export default function ForgotPassword() {
                     <CardTitle className="text-2xl">Password forgotten</CardTitle>
                     <CardDescription>Enter your email to reset your password</CardDescription>
                 </CardHeader>
-                <form>
+                <form onSubmit={handleForgotPassword}>
                     <CardContent className="grid gap-4">
                         <div className="grid gap-2">
                             <Label htmlFor="email">Email</Label>
