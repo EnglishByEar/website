@@ -326,6 +326,8 @@ export default function LeaderboardPage() {
   const hasAnyData =
     leaderboardData.weekly.length > 0 || leaderboardData.monthly.length > 0 || leaderboardData.allTime.length > 0
 
+  return null
+
   return (
     <div className="grid gap-6">
       <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
@@ -540,9 +542,8 @@ export default function LeaderboardPage() {
                         filteredLeaderboard[period].map((leaderUser) => (
                           <div
                             key={leaderUser.id}
-                            className={`grid grid-cols-12 gap-2 border-b px-4 py-3 last:border-0 hover:bg-muted/50 ${
-                              leaderUser.id === user?.id ? "bg-primary/5" : ""
-                            }`}
+                            className={`grid grid-cols-12 gap-2 border-b px-4 py-3 last:border-0 hover:bg-muted/50 ${leaderUser.id === user?.id ? "bg-primary/5" : ""
+                              }`}
                           >
                             <div className="col-span-1 flex items-center justify-center">
                               {getRankBadge(leaderUser.rank)}

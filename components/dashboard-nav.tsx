@@ -68,7 +68,7 @@ export default function DashboardNav() {
   const navItems = [
     { name: "Dashboard", href: "/dashboard", icon: LayoutDashboard },
     { name: "Exercises", href: "/dashboard/exercises", icon: BookOpen },
-    { name: "Leaderboard", href: "/dashboard/leaderboard", icon: Trophy },
+    // { name: "Leaderboard", href: "/dashboard/leaderboard", icon: Trophy },
     { name: "Progress", href: "/dashboard/progress", icon: BarChart2 },
     { name: "Settings", href: "/dashboard/settings", icon: Settings },
   ]
@@ -91,9 +91,8 @@ export default function DashboardNav() {
               <Link
                 key={item.href}
                 href={item.href}
-                className={`flex items-center gap-2 text-sm font-medium transition-colors hover:text-primary ${
-                  pathname === item.href ? "text-primary" : "text-muted-foreground"
-                }`}
+                className={`flex items-center gap-2 text-sm font-medium transition-colors hover:text-primary ${pathname === item.href ? "text-primary" : "text-muted-foreground"
+                  }`}
               >
                 <Icon className="h-4 w-4" />
                 {item.name}
@@ -157,9 +156,8 @@ export default function DashboardNav() {
                   <Link
                     key={item.href}
                     href={item.href}
-                    className={`flex items-center gap-2 rounded-md p-2 text-sm font-medium transition-colors hover:bg-accent ${
-                      pathname === item.href ? "bg-accent" : ""
-                    }`}
+                    className={`flex items-center gap-2 rounded-md p-2 text-sm font-medium transition-colors hover:bg-accent ${pathname === item.href ? "bg-accent" : ""
+                      }`}
                     onClick={() => setMobileMenuOpen(false)}
                   >
                     <Icon className="h-4 w-4" />
