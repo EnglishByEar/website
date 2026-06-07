@@ -264,7 +264,7 @@ export default function SettingsPage() {
                   <div className="flex flex-col items-center gap-2">
                     <Avatar className="h-24 w-24">
                       <AvatarImage
-                        src={profile.avatar_url || "/placeholder.svg?height=96&width=96"}
+                        src={profile.avatar_url || "/user.png"}
                         alt={profile.username}
                       />
                       <AvatarFallback>{profile.username.charAt(0).toUpperCase()}</AvatarFallback>

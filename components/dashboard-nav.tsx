@@ -36,7 +36,18 @@ export default function DashboardNav() {
           .eq("id", user.id)
           .single()
 
-        if (error) throw error
+        if (error) {
+          // PGRST116 = no row found (profile not created yet)
+          // 42P01    = table doesn't exist yet (migration not run)
+          const isExpected =
+            error.code === "PGRST116" ||
+            error.code === "42P01" ||
+            error.message?.includes("does not exist")
+          if (!isExpected) {
+            console.error("Error fetching avatar:", error)
+          }
+          return
+        }
 
         setAvatarUrl(data?.avatar_url || null)
       } catch (error) {
@@ -83,7 +94,6 @@ export default function DashboardNav() {
           </Link>
         </div>
 
-        {/* Desktop Navigation */}
         <nav className="hidden md:flex items-center gap-6">
           {navItems.map((item) => {
             const Icon = item.icon
@@ -107,7 +117,7 @@ export default function DashboardNav() {
               <Button variant="ghost" className="relative h-8 w-8 rounded-full">
                 <Avatar className="h-10 w-10">
                   <AvatarImage
-                    src={avatarUrl || "/placeholder.svg?height=96&width=96"}
+                    src={avatarUrl || "/user.png"}
                     alt="User Avatar"
                   />
                   <AvatarFallback>
@@ -138,14 +148,12 @@ export default function DashboardNav() {
             </DropdownMenuContent>
           </DropdownMenu>
 
-          {/* Mobile Menu Button */}
           <Button variant="ghost" size="icon" className="md:hidden" onClick={() => setMobileMenuOpen(!mobileMenuOpen)}>
             {mobileMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
           </Button>
         </div>
       </div>
 
-      {/* Mobile Navigation */}
       {mobileMenuOpen && (
         <div className="md:hidden border-t">
           <div className="container py-2">
