@@ -13,6 +13,7 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 import { Headphones, EyeClosed, Eye } from "lucide-react"
 import { useToast } from "@/hooks/use-toast"
 import Logo from "@/components/Logo"
+import InovateStyle from "@/components/InovateStyle"
 
 export default function LoginPage() {
   const [email, setEmail] = useState("")
@@ -83,12 +84,12 @@ export default function LoginPage() {
 
   return (
     <div className="min-h-screen flex flex-col md:flex-row">
-      <div className="hidden md:flex w-1/2 bg-blue-500 items-center justify-center">
+      <div className="hidden md:flex w-1/2  items-center justify-center flex-col">
         <Link
           href="/"
           className="flex flex-col items-center gap-4 text-white"
         >
-          <Logo />
+          <Logo width={112} height={112} />
           <span className="text-4xl font-bold">EnglishByEar</span>
         </Link>
       </div>
