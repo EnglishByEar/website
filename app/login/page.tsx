@@ -14,6 +14,7 @@ import { Headphones, EyeClosed, Eye } from "lucide-react"
 import { useToast } from "@/hooks/use-toast"
 import Logo from "@/components/Logo"
 import InovateStyle from "@/components/InovateStyle"
+import Pattern from "@/components/pattern"
 
 export default function LoginPage() {
   const [email, setEmail] = useState("")
@@ -84,7 +85,7 @@ export default function LoginPage() {
 
   return (
     <div className="min-h-screen flex flex-col md:flex-row">
-      <div className="hidden md:flex w-1/2  items-center justify-center flex-col">
+      <div className="hidden md:flex w-1/2  items-center justify-center flex-col relative">
         <Link
           href="/"
           className="flex flex-col items-center gap-4 text-white"
@@ -92,6 +93,7 @@ export default function LoginPage() {
           <Logo width={112} height={112} />
           <span className="text-4xl font-bold">EnglishByEar</span>
         </Link>
+        <Pattern />
       </div>
 
       <div className="min-h-screen flex w-full md:w-1/2 items-center justify-center p-6 bg-background">

@@ -8,6 +8,7 @@ import { useSupabase } from "@/components/supabase-provider"
 import { useRouter } from "next/navigation"
 import { useEffect } from "react"
 import Logo from "@/components/Logo";
+import Pattern from "@/components/pattern"
 
 export default function Home() {
   const { supabase, user, isLoading } = useSupabase()
@@ -70,7 +71,8 @@ export default function Home() {
           </div>
         </section>
 
-        <section className="container py-12 md:py-24 lg:py-32 bg-muted/50 rounded-lg">
+        <section className="relative py-12 md:py-24 lg:py-32 bg-muted/50 w-full">
+          <Pattern />
           <div className="mx-auto grid max-w-5xl items-center gap-6 py-12 lg:grid-cols-3">
             <div className="flex flex-col items-center gap-2 text-center">
               <div className="flex h-16 w-16 items-center justify-center rounded-full bg-primary/10">
