@@ -12,6 +12,7 @@ import { Label } from "@/components/ui/label"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import { Headphones, EyeClosed, Eye } from "lucide-react"
 import { useToast } from "@/hooks/use-toast"
+import Logo from "@/components/Logo"
 
 export default function LoginPage() {
   const [email, setEmail] = useState("")
@@ -81,69 +82,96 @@ export default function LoginPage() {
   }
 
   return (
-    <div className="container flex h-screen w-screen flex-col items-center justify-center">
-      <Link href="/" className="absolute left-4 top-4 md:left-8 md:top-8 flex items-center gap-2">
-        <Headphones className="h-6 w-6 text-primary" />
-        <span className="text-xl font-bold">EnglishByEar</span>
-      </Link>
-      <Card className="w-full max-w-md">
-        <CardHeader className="space-y-1">
-          <CardTitle className="text-2xl">Login</CardTitle>
-          <CardDescription>Enter your email and password to access your account</CardDescription>
-        </CardHeader>
-        <form onSubmit={handleLogin}>
-          <CardContent className="grid gap-4">
-            <div className="grid gap-2">
-              <Label htmlFor="email">Email</Label>
-              <Input
-                id="email"
-                type="email"
-                placeholder="name@example.com"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                required
-              />
-            </div>
-            <div className="grid gap-2">
-              <div className="flex items-center justify-between">
-                <Label htmlFor="password">Password</Label>
+    <div className="min-h-screen flex flex-col md:flex-row">
+      <div className="hidden md:flex w-1/2 bg-blue-500 items-center justify-center">
+        <Link
+          href="/"
+          className="flex flex-col items-center gap-4 text-white"
+        >
+          <Logo />
+          <span className="text-4xl font-bold">EnglishByEar</span>
+        </Link>
+      </div>
+
+      <div className="min-h-screen flex w-full md:w-1/2 items-center justify-center p-6 bg-background">
+        <Card className="w-full max-w-md">
+          <CardHeader className="space-y-1">
+            <CardTitle className="text-2xl">Login</CardTitle>
+            <CardDescription>
+              Enter your email and password to access your account
+            </CardDescription>
+          </CardHeader>
+
+          <form onSubmit={handleLogin}>
+            <CardContent className="grid gap-4">
+              <div className="grid gap-2">
+                <Label htmlFor="email">Email</Label>
+                <Input
+                  id="email"
+                  type="email"
+                  placeholder="name@example.com"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  required
+                />
               </div>
-              <Input
-                id="password"
-                type={visible ? "text" : "password"}
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                required
-              />
-              <div className="flex items-center justify-between">
-                <button
-                  type="button"
-                  onClick={() => setVisible((prev) => !prev)}
-                  aria-label={visible ? "Hide password" : "Show password"}
-                  aria-pressed={visible}
-                  className="p-2"
+
+              <div className="grid gap-2">
+                <div className="flex items-center justify-between">
+                  <Label htmlFor="password">Password</Label>
+                </div>
+
+                <Input
+                  id="password"
+                  type={visible ? "text" : "password"}
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  required
+                />
+
+                <div className="flex items-center justify-between">
+                  <button
+                    type="button"
+                    onClick={() => setVisible((prev) => !prev)}
+                    aria-label={visible ? "Hide password" : "Show password"}
+                    aria-pressed={visible}
+                    className="p-2"
+                  >
+                    {visible ? (
+                      <EyeClosed size={18} />
+                    ) : (
+                      <Eye size={18} />
+                    )}
+                  </button>
+
+                  <Link
+                    href="/forgot-password"
+                    className="text-sm text-muted-foreground hover:underline"
+                  >
+                    Forgot password?
+                  </Link>
+                </div>
+              </div>
+            </CardContent>
+
+            <CardFooter className="flex flex-col gap-2">
+              <Button type="submit" className="w-full" disabled={loading}>
+                {loading ? "Logging in..." : "Login"}
+              </Button>
+
+              <div className="text-center text-sm text-muted-foreground">
+                Don&apos;t have an account?{" "}
+                <Link
+                  href="/register"
+                  className="underline underline-offset-4 hover:text-primary"
                 >
-                  {visible ? <EyeClosed size={18} /> : <Eye size={18} />}
-                </button>
-                <Link href="/forgot-password" className="text-sm text-muted-foreground hover:underline">
-                  Forgot password?
+                  Sign up
                 </Link>
               </div>
-            </div>
-          </CardContent>
-          <CardFooter className="flex flex-col gap-2">
-            <Button type="submit" className="w-full" disabled={loading}>
-              {loading ? "Logging in..." : "Login"}
-            </Button>
-            <div className="text-center text-sm text-muted-foreground">
-              Don&apos;t have an account?{" "}
-              <Link href="/register" className="underline underline-offset-4 hover:text-primary">
-                Sign up
-              </Link>
-            </div>
-          </CardFooter>
-        </form>
-      </Card>
+            </CardFooter>
+          </form>
+        </Card>
+      </div>
     </div>
   )
 }
