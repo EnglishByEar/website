@@ -7,6 +7,7 @@ import Footer from "@/components/footer"
 import { useSupabase } from "@/components/supabase-provider"
 import { useRouter } from "next/navigation"
 import { useEffect } from "react"
+import Logo from "@/components/Logo";
 
 export default function Home() {
   const { supabase, user, isLoading } = useSupabase()
@@ -28,9 +29,9 @@ export default function Home() {
     <div className="flex min-h-screen flex-col">
       <header className="sticky top-0 z-40 border-b bg-background">
         <div className="container flex h-16 items-center justify-between py-4">
-          <div className="flex items-center gap-2">
-            <Headphones className="h-6 w-6 text-primary" />
+          <div className="flex items-center">
             <span className="text-xl font-bold">EnglishByEar</span>
+            <Logo />
           </div>
           <nav className="flex items-center gap-4">
             <Link href="/podcast">
