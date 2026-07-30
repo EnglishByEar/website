@@ -31,11 +31,11 @@ export default function Home() {
       <header className="sticky top-0 z-40 border-b bg-background">
         <div className="container flex h-16 items-center justify-between py-4">
           <div className="flex items-center">
-            <span className="text-xl font-bold">EnglishByEar</span>
+            <span className="text-base md:text-xl font-bold ">EnglishByEar</span>
             <Logo />
           </div>
           <nav className="flex items-center gap-4">
-            <Link href="/podcast">
+            <Link href="/podcast" className="hidden md:block">
               <Button variant="outline">Podcast</Button>
             </Link>
             <Link href="/login">
@@ -50,7 +50,7 @@ export default function Home() {
       <main className="flex-1">
         <section className="container py-12 md:py-24 lg:py-32">
           <div className="mx-auto flex max-w-[980px] flex-col items-center gap-4 text-center">
-            <h1 className="text-3xl font-bold leading-tight tracking-tighter md:text-5xl lg:text-6xl lg:leading-[1.1]">
+            <h1 className="text-3xl font-bold md:text-5xl lg:text-6xl lg:leading-[1.1]">
               Master English Listening Skills with EnglishByEar
             </h1>
             <p className="max-w-[750px] text-lg text-muted-foreground sm:text-xl">
@@ -71,37 +71,39 @@ export default function Home() {
           </div>
         </section>
 
-        <section className="relative py-12 md:py-24 lg:py-32 bg-muted/50 w-full">
-          <Pattern />
-          <div className="mx-auto grid max-w-5xl items-center gap-6 py-12 lg:grid-cols-3">
-            <div className="flex flex-col items-center gap-2 text-center">
-              <div className="flex h-16 w-16 items-center justify-center rounded-full bg-primary/10">
-                <Headphones className="h-8 w-8 text-primary" />
+        <section className="mx-auto max-w-7xl px-4">
+          <section className="relative py-12 md:py-24 rounded-3xl lg:py-32 bg-muted/75 w-full">
+            <Pattern />
+            <div className="mx-auto grid max-w-5xl items-center gap-6 py-12 lg:grid-cols-3">
+              <div className="flex flex-col items-center gap-2 text-center">
+                <div className="flex h-16 w-16 items-center justify-center rounded-full bg-primary/10">
+                  <Headphones className="h-8 w-8 text-primary" />
+                </div>
+                <h3 className="text-xl font-bold">Listen & Type</h3>
+                <p className="text-muted-foreground">
+                  Listen to English texts and type what you hear to improve your comprehension
+                </p>
               </div>
-              <h3 className="text-xl font-bold">Listen & Type</h3>
-              <p className="text-muted-foreground">
-                Listen to English texts and type what you hear to improve your comprehension
-              </p>
-            </div>
-            <div className="flex flex-col items-center gap-2 text-center">
-              <div className="flex h-16 w-16 items-center justify-center rounded-full bg-primary/10">
-                <BarChart2 className="h-8 w-8 text-primary" />
+              <div className="flex flex-col items-center gap-2 text-center">
+                <div className="flex h-16 w-16 items-center justify-center rounded-full bg-primary/10">
+                  <BarChart2 className="h-8 w-8 text-primary" />
+                </div>
+                <h3 className="text-xl font-bold">Track Progress</h3>
+                <p className="text-muted-foreground">
+                  Monitor your improvement with detailed statistics and performance metrics
+                </p>
               </div>
-              <h3 className="text-xl font-bold">Track Progress</h3>
-              <p className="text-muted-foreground">
-                Monitor your improvement with detailed statistics and performance metrics
-              </p>
-            </div>
-            <div className="flex flex-col items-center gap-2 text-center">
-              <div className="flex h-16 w-16 items-center justify-center rounded-full bg-primary/10">
-                <Trophy className="h-8 w-8 text-primary" />
+              <div className="flex flex-col items-center gap-2 text-center">
+                <div className="flex h-16 w-16 items-center justify-center rounded-full bg-primary/10">
+                  <Trophy className="h-8 w-8 text-primary" />
+                </div>
+                <h3 className="text-xl font-bold">Compete & Achieve</h3>
+                <p className="text-muted-foreground">
+                  Join leaderboards and complete daily challenges to earn achievements
+                </p>
               </div>
-              <h3 className="text-xl font-bold">Compete & Achieve</h3>
-              <p className="text-muted-foreground">
-                Join leaderboards and complete daily challenges to earn achievements
-              </p>
             </div>
-          </div>
+          </section>
         </section>
 
         <section className="container py-12 md:py-24 lg:py-32">
