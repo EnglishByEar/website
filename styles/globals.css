@@ -64,22 +64,22 @@
 
 
 .float-demo{
-padding:100px;
-display:flex;
-justify-content:center;
-background:#020617;
-border-radius:12px;
+  padding:100px;
+  display:flex;
+  justify-content:center;
+  background:#020617;
+  border-radius:12px;
 }
 
 .float-text{
-font-size:36px;
-font-weight:800;
-color:#fff;
-animation:float 6s ease-in-out infinite;
+  font-size:36px;
+  font-weight:800;
+  color:#fff;
+  animation:float 6s ease-in-out infinite;
 }
 
 @keyframes float{
-0%{transform:translateY(0);}
-50%{transform:translateY(-15px);}
-100%{transform:translateY(0);}
+  0%{transform:translateY(0);}
+  50%{transform:translateY(-15px);}
+  100%{transform:translateY(0);}
 }
