@@ -2,7 +2,7 @@ import { CategoryCard } from '@/components/category-card'
 import { grammarCategories } from '@/data/grammar/categories'
 
 export const metadata = {
-    title: 'Grammar Topics - Grammar Hub',
+    title: 'Grammar Topics - English By Ear',
     description: 'Explore all grammar topics including tenses, sentence structure, and more.',
 }
 
@@ -30,8 +30,8 @@ export default function GrammarPage() {
                     </div>
                 </div>
 
-                <footer className="border-t border-border px-4 py-8 text-center text-sm text-foreground/60">
-                    <p>&copy; 2024 Grammar Hub. Learning English, one lesson at a time.</p>
+                <footer className="absolute w-full bottom-0 border-t border-border px-4 py-8 text-center text-sm text-foreground/60">
+                    <p>&copy; 2026 English By Ear. Learning English, one lesson at a time.</p>
                 </footer>
             </main>
         </>

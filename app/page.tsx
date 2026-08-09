@@ -6,13 +6,15 @@ import { Headphones, BarChart2, Trophy, Clock } from "lucide-react"
 import Footer from "@/components/footer"
 import { useSupabase } from "@/components/supabase-provider"
 import { useRouter } from "next/navigation"
-import { useEffect } from "react"
 import Logo from "@/components/Logo";
 import Pattern from "@/components/pattern"
+import { grammarCategories } from "@/data/grammar/categories"
+import { CategoryCard } from "@/components/category-card"
 
 export default function Home() {
   const { supabase, user, isLoading } = useSupabase()
   const router = useRouter()
+  const featuredCategories = grammarCategories.slice(0, 3);
 
   const goToExercise = () => {
     if (user) {
@@ -32,7 +34,6 @@ export default function Home() {
         <div className="container flex h-16 items-center justify-between py-4">
           <div className="flex items-center">
             <span className="text-base md:text-xl font-bold ">EnglishByEar</span>
-            <Logo />
           </div>
           <nav className="flex items-center gap-4">
             <Link href="/podcast" className="hidden md:block">
@@ -48,11 +49,14 @@ export default function Home() {
         </div>
       </header>
       <main className="flex-1">
-        <section className="container py-12 md:py-24 lg:py-32">
+        <section className="container py-16 md:py-24 lg:py-32">
           <div className="mx-auto flex max-w-[980px] flex-col items-center gap-4 text-center">
-            <h1 className="text-3xl font-bold md:text-5xl lg:text-6xl lg:leading-[1.1]">
-              Master English Listening Skills with EnglishByEar
-            </h1>
+            <div className="flex flex-col items-center gap-4">
+              <p className="float-text"><Logo width={150} height={150} /></p>
+              <h1 className="text-3xl md:text-5xl lg:text-6xl font-bold">
+                Master English Listening Skills with EnglishByEar
+              </h1>
+            </div>
             <p className="max-w-[750px] text-lg text-muted-foreground sm:text-xl">
               Practice listening to English texts at your own pace and track your progress over time.
             </p>
@@ -71,7 +75,7 @@ export default function Home() {
           </div>
         </section>
 
-        <section className="mx-auto max-w-7xl px-4">
+        <section className="container px-4">
           <section className="relative py-12 md:py-24 rounded-3xl lg:py-32 bg-muted/75 w-full">
             <Pattern />
             <div className="mx-auto grid max-w-5xl items-center gap-6 py-12 lg:grid-cols-3">
@@ -106,8 +110,34 @@ export default function Home() {
           </section>
         </section>
 
+        <section id="featured" className="container px-4 py-12 sm:py-16">
+          <div>
+            <div className="mb-12 flex justify-between items-center gap-4 flex-col sm:flex-row">
+              <div>
+                <h2 className="text-3xl font-bold text-foreground mb-4">Featured Topics</h2>
+                <p className="text-foreground/70">
+                  Start with these popular grammar categories to build a strong foundation.
+                </p>
+              </div>
+              <div className="text-center pt-6">
+                <Link
+                  href="/grammar"
+                  className="inline-flex items-center text-primary font-semibold hover:opacity-80 transition-opacity"
+                >
+                  View All Topics →
+                </Link>
+              </div>
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">
+              {featuredCategories.map((category) => (
+                <CategoryCard key={category.id} category={category} />
+              ))}
+            </div>
+          </div>
+        </section>
+
         <section className="container py-12 md:py-24 lg:py-32">
-          <div className="mx-auto grid max-w-5xl gap-6 lg:grid-cols-2">
+          <div className="grid gap-6 lg:grid-cols-2">
             <div className="flex flex-col justify-center gap-4">
               <h2 className="text-3xl font-bold tracking-tighter md:text-4xl">Three Difficulty Levels</h2>
               <p className="text-muted-foreground">
@@ -129,7 +159,7 @@ export default function Home() {
                 </li>
               </ul>
             </div>
-            <div className="flex items-center justify-center">
+            <div className="flex justify-end items-center">
               <div className="relative h-[350px] w-full max-w-[400px] overflow-hidden rounded-xl border bg-background p-4 shadow-xl">
                 <div className="absolute inset-0 bg-gradient-to-b from-background/5 to-background/50" />
                 <div className="relative flex h-full flex-col gap-4">
