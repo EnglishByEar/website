@@ -2,7 +2,7 @@ import React from 'react'
 
 export default function Pattern() {
     return (
-        <div className="absolute inset-0 z-0 rounded-3xl overflow-hidden">
+        <div className="absolute inset-0 -z-10 rounded-3xl overflow-hidden">
             <svg
                 width="100%"
                 height="100%"
@@ -24,7 +24,6 @@ export default function Pattern() {
                         <rect x="10" y="-0.84668" width="1200" height="811.693" fill="url(#paint0_linear_186_1134)" />
                     </mask>
                     <g mask="url(#mask0_186_1134)">
-                        {/* Grid Rectangles */}
                         {[...Array(35)].map((_, i) => (
                             <React.Fragment key={`row1-${i}`}>
                                 <rect
