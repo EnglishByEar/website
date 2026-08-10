@@ -10,11 +10,25 @@ import Logo from "@/components/Logo";
 import Pattern from "@/components/pattern"
 import { grammarCategories } from "@/data/grammar/categories"
 import { CategoryCard } from "@/components/category-card"
+import { useState, useEffect } from "react"
+import SplashScreen from "@/components/SplashScreen"
 
 export default function Home() {
-  const { supabase, user, isLoading } = useSupabase()
+  const { supabase, user } = useSupabase()
+  const [isLoading, setIsLoading] = useState(true)
   const router = useRouter()
   const featuredCategories = grammarCategories.slice(0, 3);
+
+  useEffect(() => {
+    const initialize = async () => {
+      setTimeout(() => {
+        setIsLoading(false);
+      }, 3000);
+    };
+
+    initialize();
+  }, []);
+
 
   const goToExercise = () => {
     if (user) {
@@ -25,7 +39,7 @@ export default function Home() {
   }
 
   if (isLoading) {
-    return <div className="flex h-screen items-center justify-center">Loading...</div>
+    return <SplashScreen />
   }
 
   return (
@@ -76,7 +90,7 @@ export default function Home() {
         </section>
 
         <section className="container px-4">
-          <section className="relative py-12 md:py-24 rounded-3xl lg:py-32 bg-muted/75 w-full">
+          <section className="relative py-12 md:py-24 rounded-3xl lg:py-32 w-full">
             <Pattern />
             <div className="mx-auto grid max-w-5xl items-center gap-6 py-12 lg:grid-cols-3">
               <div className="flex flex-col items-center gap-2 text-center">
@@ -188,3 +202,4 @@ export default function Home() {
     </div>
   )
 }
+
