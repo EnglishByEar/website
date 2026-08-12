@@ -11,7 +11,7 @@ export const grammarCategories: GrammarCategory[] = [
   {
     id: 'sentence-structure',
     title: 'Sentence Structure',
-    description: 'Learn how to construct correct English sentences',
+    description: 'Learn how English sentences fit together, from basic subject–verb patterns to complex ideas and smooth transitions.',
     slug: 'sentence-structure',
     lessonCount: 8,
   },
