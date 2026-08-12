@@ -74,6 +74,17 @@ export const sentenceStructureLessons: GrammarLesson[] = [
         commonMistakes: [{ incorrect: 'The list of names are long.', correct: 'The list of names is long.', explanation: 'The main subject is list, not names.' }],
         usage: 'Writing grammatically accurate statements',
     },
+    {
+        id: 'sentence-connectors',
+        title: 'Sentence Connectors',
+        category: 'sentence-structure',
+        description: 'Use linking words to make ideas flow naturally.',
+        formula: { structure: 'Idea 1 + connector + Idea 2', breakdown: 'Choose connectors that match the relationship between ideas.' },
+        explanation: 'Connectors help readers follow the logic of your writing. They can show addition, contrast, cause, result, or sequence.',
+        examples: [{ sentence: 'The task was difficult; however, we finished it.' }, { sentence: 'First, read the instructions. Then, answer the questions.' }],
+        commonMistakes: [{ incorrect: 'It was raining, however we went out.', correct: 'It was raining; however, we went out.', explanation: 'Use a semicolon before however when it joins two independent clauses.' }],
+        usage: 'Creating smoother paragraphs and logical transitions',
+    },
 ]
 
 
