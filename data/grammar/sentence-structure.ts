@@ -85,6 +85,17 @@ export const sentenceStructureLessons: GrammarLesson[] = [
         commonMistakes: [{ incorrect: 'It was raining, however we went out.', correct: 'It was raining; however, we went out.', explanation: 'Use a semicolon before however when it joins two independent clauses.' }],
         usage: 'Creating smoother paragraphs and logical transitions',
     },
+    {
+        id: 'sentence-variety',
+        title: 'Sentence Variety',
+        category: 'sentence-structure',
+        description: 'Mix sentence lengths and structures for engaging writing.',
+        formula: { structure: 'Vary simple, compound, and complex sentence patterns' },
+        explanation: 'Strong writing balances different sentence structures. Variety improves rhythm, emphasizes important ideas, and keeps readers engaged.',
+        examples: [{ sentence: 'The bell rang. Everyone stood up, and the teacher smiled.' }, { sentence: 'When the bell rang, everyone stood up.' }],
+        commonMistakes: [{ incorrect: 'I woke up. I ate. I left. I arrived.', correct: 'I woke up, ate breakfast, and left before the traffic became heavy.', explanation: 'Combine related short sentences to create a smoother flow.' }],
+        usage: 'Improving clarity, rhythm, and writing style',
+    },
 ]
 
 
