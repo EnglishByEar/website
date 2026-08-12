@@ -99,6 +99,10 @@ export const sentenceStructureLessons: GrammarLesson[] = [
 ]
 
 
-export function getSentenceLessonBySlug(slug: string) {
+export function getLessonBySlug(slug: string) {
   return sentenceStructureLessons.find((lesson) => lesson.id === slug)
+}
+
+export function getLessonsByCategory(categoryId: string): GrammarLesson[] {
+  return sentenceStructureLessons.filter((lesson) => lesson.category === categoryId)
 }
