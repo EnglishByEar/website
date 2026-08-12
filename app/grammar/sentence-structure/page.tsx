@@ -21,9 +21,9 @@ export default function SentenceStructurePage() {
                     <div className="mx-auto max-w-4xl">
                         <div className="mb-12">
                             <p className="mb-3 text-sm font-semibold uppercase tracking-wide text-primary">Grammar section</p>
-                            <h1 className="text-4xl font-bold text-foreground sm:text-5xl">Sentence Structure</h1>
+                            <h1 className="text-4xl font-bold text-foreground sm:text-5xl">{category.title}</h1>
                             <p className="mt-4 max-w-2xl text-lg leading-7 text-foreground/70">
-                                Learn how English sentences fit together, from basic subject–verb patterns to complex ideas and smooth transitions.
+                                {category.description}
                             </p>
                             <div className="mt-6 flex flex-wrap gap-3 text-sm text-foreground/60">
                                 <span className="rounded-full bg-secondary/50 px-3 py-1">{sentenceStructureLessons.length} lessons</span>
