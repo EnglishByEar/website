@@ -63,6 +63,17 @@ export const sentenceStructureLessons: GrammarLesson[] = [
         commonMistakes: [{ incorrect: 'You like coffee?', correct: 'Do you like coffee?', explanation: 'Use do to form a present simple question.' }],
         usage: 'Asking for information and expressing disagreement or absence',
     },
+    {
+        id: 'subject-verb-agreement',
+        title: 'Subject–Verb Agreement',
+        category: 'sentence-structure',
+        description: 'Make subjects and verbs agree in number.',
+        formula: { structure: 'Singular subject + singular verb; plural subject + plural verb' },
+        explanation: 'The verb must match its subject. In the present simple, singular third-person subjects usually take a verb ending in -s.',
+        examples: [{ sentence: 'The student works hard.' }, { sentence: 'The students work hard.' }],
+        commonMistakes: [{ incorrect: 'The list of names are long.', correct: 'The list of names is long.', explanation: 'The main subject is list, not names.' }],
+        usage: 'Writing grammatically accurate statements',
+    },
 ]
 
 
