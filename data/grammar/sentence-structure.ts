@@ -41,6 +41,17 @@ export const sentenceStructureLessons: GrammarLesson[] = [
         commonMistakes: [{ incorrect: 'I was hungry I made a sandwich.', correct: 'I was hungry, so I made a sandwich.', explanation: 'Use punctuation and a conjunction to avoid a run-on sentence.' }],
         usage: 'Connecting equal ideas and showing relationships',
     },
+    {
+        id: 'complex-sentences',
+        title: 'Complex Sentences',
+        category: 'sentence-structure',
+        description: 'Combine a main clause with a dependent clause.',
+        formula: { structure: 'Independent clause + dependent clause', breakdown: 'Subordinating conjunctions include because, although, when, if, and while.' },
+        explanation: 'Complex sentences show relationships such as time, cause, contrast, or condition by combining one complete idea with a dependent clause.',
+        examples: [{ sentence: 'I stayed inside because it was cold.' }, { sentence: 'Although she was nervous, she gave a great presentation.' }],
+        commonMistakes: [{ incorrect: 'Although it was late. We continued.', correct: 'Although it was late, we continued.', explanation: 'Keep the dependent clause connected to the main clause.' }],
+        usage: 'Explaining reasons, conditions, time, and contrast',
+    },
 ]
 
 
