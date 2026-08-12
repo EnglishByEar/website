@@ -43,10 +43,6 @@ export default function TensesPage() {
                         </div>
                     </div>
                 </div>
-
-                <footer className="border-t border-border px-4 py-8 text-center text-sm text-foreground/60">
-                    <p>&copy; 2026 English By Ear. Mastering tenses, one lesson at a time.</p>
-                </footer>
             </main>
         </>
     )

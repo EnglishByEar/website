@@ -179,10 +179,6 @@ export default async function LessonPage({ params }: LessonPageProps) {
                         )}
                     </div>
                 </div>
-
-                <footer className="border-t border-border px-4 py-8 text-center text-sm text-foreground/60">
-                    <p>&copy; 2026 Grammar Hub. Master grammar, one lesson at a time.</p>
-                </footer>
             </main>
         </>
     )
