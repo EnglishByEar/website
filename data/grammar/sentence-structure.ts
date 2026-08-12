@@ -20,3 +20,8 @@ export const sentenceStructureLessons: GrammarLesson[] = [
         usage: 'Building clear, complete sentences',
     },
 ]
+
+
+export function getSentenceLessonBySlug(slug: string) {
+  return sentenceStructureLessons.find((lesson) => lesson.id === slug)
+}
