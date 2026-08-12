@@ -23,6 +23,7 @@ export default function TensesPage() {
                 <div className="px-4 py-12 sm:py-16">
                     <div className="mx-auto max-w-4xl">
                         <div className="mb-12">
+                            <p className="mb-3 text-sm font-semibold uppercase tracking-wide text-primary">Grammar section</p>
                             <h1 className="text-4xl font-bold text-foreground mb-4">{category.title}</h1>
                             <p className="text-lg text-foreground/70 mb-6">{category.description}</p>
                             <div className="inline-flex items-center rounded-full bg-secondary/50 px-4 py-2">

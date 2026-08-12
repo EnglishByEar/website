@@ -26,7 +26,7 @@ export async function generateMetadata({ params }: LessonPageProps) {
     }
 
     return {
-        title: `${lesson.title} - Grammar Hub`,
+        title: `${lesson.title} - English By Ear`,
         description: lesson.description,
     }
 }
@@ -57,6 +57,9 @@ export default async function LessonPage({ params }: LessonPageProps) {
             <main className="min-h-screen bg-background">
                 <div className="px-4 py-12 sm:py-16">
                     <div className="mx-auto max-w-4xl">
+                        <Link href="/grammar/sentence-structure" className="mb-8 inline-flex items-center text-sm font-medium text-primary hover:opacity-80">
+                            <ArrowLeft className="mr-2 h-4 w-4" /> Back to tenses
+                        </Link>
                         <div className="mb-8 flex items-center gap-2 text-sm text-foreground/60">
                             <Link href="/grammar" className="hover:text-foreground transition-colors">
                                 Grammar
