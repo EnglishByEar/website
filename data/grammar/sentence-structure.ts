@@ -19,6 +19,17 @@ export const sentenceStructureLessons: GrammarLesson[] = [
         ],
         usage: 'Building clear, complete sentences',
     },
+    {
+    id: 'simple-sentences',
+    title: 'Simple Sentences',
+    category: 'sentence-structure',
+    description: 'Build clear sentences with one independent clause.',
+    formula: { structure: 'One independent clause', breakdown: 'Subject + predicate = one complete thought.' },
+    explanation: 'A simple sentence has one independent clause. It can have a compound subject or verb, but it still expresses one main idea.',
+    examples: [{ sentence: 'Maya and Leo study together.' }, { sentence: 'The dog barked and ran.' }],
+    commonMistakes: [{ incorrect: 'Running through the park.', correct: 'The children are running through the park.', explanation: 'Include a subject and a complete verb.' }],
+    usage: 'Direct statements and strong, readable writing',
+  },
 ]
 
 
