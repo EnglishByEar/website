@@ -52,6 +52,17 @@ export const sentenceStructureLessons: GrammarLesson[] = [
         commonMistakes: [{ incorrect: 'Although it was late. We continued.', correct: 'Although it was late, we continued.', explanation: 'Keep the dependent clause connected to the main clause.' }],
         usage: 'Explaining reasons, conditions, time, and contrast',
     },
+    {
+        id: 'questions-and-negatives',
+        title: 'Questions and Negatives',
+        category: 'sentence-structure',
+        description: 'Form natural questions and negative statements.',
+        formula: { structure: 'Auxiliary + subject + main verb?', breakdown: 'Use do, does, or did when there is no other auxiliary verb.' },
+        explanation: 'English questions often change the word order by placing an auxiliary verb before the subject. Negative sentences usually add not after the auxiliary.',
+        examples: [{ sentence: 'Do you like this book?' }, { sentence: 'She does not live nearby.' }, { sentence: 'Were they ready?' }],
+        commonMistakes: [{ incorrect: 'You like coffee?', correct: 'Do you like coffee?', explanation: 'Use do to form a present simple question.' }],
+        usage: 'Asking for information and expressing disagreement or absence',
+    },
 ]
 
 
