@@ -43,6 +43,20 @@ export const partsOfSpeechLessons: GrammarLesson[] = [
     examples: [{ sentence: 'The keys are under the table.' }, { sentence: 'We met after lunch.' }],
     commonMistakes: [{ incorrect: 'She is good in math.', correct: 'She is good at math.', explanation: 'Some adjectives pair with specific prepositions.' }], signalWords: ['in', 'on', 'at'],
   },
+  {
+    id: 'conjunctions', title: 'Conjunctions', category: 'parts-of-speech', description: 'Connect words, phrases, and clauses.',
+    formula: { structure: 'Independent clause + conjunction + independent clause', breakdown: 'Coordinating conjunctions include for, and, nor, but, or, yet, and so.' },
+    explanation: 'Conjunctions help ideas flow together. Choose a conjunction based on the relationship between the ideas.',
+    examples: [{ sentence: 'I wanted to go, but I was tired.' }, { sentence: 'Tea and coffee are available.' }],
+    commonMistakes: [{ incorrect: 'Because I was late. I ran.', correct: 'Because I was late, I ran.', explanation: 'A dependent clause beginning with because needs a main clause.' }], signalWords: ['and', 'but', 'because'],
+  },
+  {
+    id: 'interjections', title: 'Interjections', category: 'parts-of-speech', description: 'Express sudden feelings, reactions, or emphasis.',
+    formula: { structure: 'Interjection + punctuation', breakdown: 'Interjections are often separated with a comma or an exclamation mark.' },
+    explanation: 'Interjections are short expressions that show emotion or reaction. They are more common in conversation and informal writing.',
+    examples: [{ sentence: 'Wow! That was an impressive performance.' }, { sentence: 'Oh, I forgot my keys.' }],
+    commonMistakes: [{ incorrect: 'Wow that is amazing!', correct: 'Wow, that is amazing!', explanation: 'Use a comma when the interjection is mild and connected to the sentence.' }], signalWords: ['wow', 'oh', 'ouch'],
+  },
 ]
 
 export function getPartsLessonBySlug(slug: string) {
