@@ -29,6 +29,20 @@ export const partsOfSpeechLessons: GrammarLesson[] = [
     examples: [{ sentence: 'We bought a comfortable chair.' }, { sentence: 'The sky became dark.' }],
     commonMistakes: [{ incorrect: 'She sings beautiful.', correct: 'She sings beautifully.', explanation: 'Use an adverb to describe how an action is performed.' }], signalWords: ['what kind', 'which one', 'how many'],
   },
+  {
+    id: 'adverbs', title: 'Adverbs', category: 'parts-of-speech', description: 'Modify verbs, adjectives, other adverbs, or whole clauses.',
+    formula: { structure: 'Adverb + adjective/adverb or verb + adverb', breakdown: 'Adverbs can show manner, time, place, frequency, or degree.' },
+    explanation: 'Adverbs add detail about when, where, how, or how often something happens. Many, but not all, end in -ly.',
+    examples: [{ sentence: 'He carefully checked the answer.' }, { sentence: 'We often study together.' }],
+    commonMistakes: [{ incorrect: 'She speaks English fluent.', correct: 'She speaks English fluently.', explanation: 'Use an adverb to modify the verb speaks.' }], signalWords: ['how', 'when', 'where'],
+  },
+  {
+    id: 'prepositions', title: 'Prepositions', category: 'parts-of-speech', description: 'Show relationships of time, place, direction, and more.',
+    formula: { structure: 'Preposition + noun/pronoun', breakdown: 'The noun or pronoun after a preposition is its object.' },
+    explanation: 'Prepositions connect words and show relationships such as location, movement, time, or connection.',
+    examples: [{ sentence: 'The keys are under the table.' }, { sentence: 'We met after lunch.' }],
+    commonMistakes: [{ incorrect: 'She is good in math.', correct: 'She is good at math.', explanation: 'Some adjectives pair with specific prepositions.' }], signalWords: ['in', 'on', 'at'],
+  },
 ]
 
 export function getPartsLessonBySlug(slug: string) {
