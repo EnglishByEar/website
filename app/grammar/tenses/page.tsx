@@ -4,7 +4,7 @@ import { getLessonsByCategory } from '@/data/grammar/tenses'
 import { notFound } from 'next/navigation'
 
 export const metadata = {
-    title: 'English Tenses - Grammar Hub',
+    title: 'English Tenses - English By Ear',
     description: 'Master all English verb tenses with clear explanations and examples.',
 }
 

@@ -19,7 +19,7 @@ export async function generateMetadata({ params }: LessonPageProps) {
     const { slug } = await params
     const lesson = getPartsLessonBySlug(slug)
     return lesson
-        ? { title: `${lesson.title} - Grammar Hub`, description: lesson.description }
+        ? { title: `${lesson.title} - EnglishbyEar`, description: lesson.description }
         : { title: 'Lesson Not Found' }
 }
 
