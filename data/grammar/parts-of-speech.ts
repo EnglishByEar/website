@@ -57,6 +57,20 @@ export const partsOfSpeechLessons: GrammarLesson[] = [
     examples: [{ sentence: 'Wow! That was an impressive performance.' }, { sentence: 'Oh, I forgot my keys.' }],
     commonMistakes: [{ incorrect: 'Wow that is amazing!', correct: 'Wow, that is amazing!', explanation: 'Use a comma when the interjection is mild and connected to the sentence.' }], signalWords: ['wow', 'oh', 'ouch'],
   },
+  {
+    id: 'determiners', title: 'Determiners', category: 'parts-of-speech', description: 'Introduce nouns and show quantity or ownership.',
+    formula: { structure: 'Determiner + noun', breakdown: 'Articles, demonstratives, possessives, and quantifiers can act as determiners.' },
+    explanation: 'Determiners help listeners understand which noun you mean and whether it is specific, general, singular, plural, or owned by someone.',
+    examples: [{ sentence: 'I need an umbrella.' }, { sentence: 'Those books are mine.' }],
+    commonMistakes: [{ incorrect: 'She is teacher.', correct: 'She is a teacher.', explanation: 'Singular countable nouns usually need a determiner.' }], signalWords: ['a', 'the', 'this'],
+  },
+  {
+    id: 'word-classes-review', title: 'Parts of Speech Review', category: 'parts-of-speech', description: 'Practice identifying how words work in complete sentences.',
+    formula: { structure: 'Context determines a word’s part of speech', breakdown: 'The same word can serve different roles in different sentences.' },
+    explanation: 'Reviewing parts of speech in context helps you understand sentence meaning and write with greater accuracy.',
+    examples: [{ sentence: 'I clean the room every day. The room is clean.' }, { sentence: 'They work hard. Their hard work paid off.' }],
+    commonMistakes: [{ incorrect: 'Label every word by its dictionary definition.', correct: 'Identify each word by its role in the sentence.', explanation: 'A word’s function can change depending on how it is used.' }], signalWords: ['review', 'context', 'practice'],
+  },
 ]
 
 export function getPartsLessonBySlug(slug: string) {
