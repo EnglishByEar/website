@@ -15,7 +15,20 @@ export const partsOfSpeechLessons: GrammarLesson[] = [
     examples: [{ sentence: 'Maria called me after she arrived.' }, { sentence: 'They invited us to dinner.' }],
     commonMistakes: [{ incorrect: 'Him and I went home.', correct: 'He and I went home.', explanation: 'Use subject pronouns when they perform the action.' }], signalWords: ['I', 'you', 'they'],
   },
-  
+  {
+    id: 'verbs', title: 'Verbs', category: 'parts-of-speech', description: 'Show actions, events, and states of being.',
+    formula: { structure: 'Subject + verb', breakdown: 'Verbs change for tense, person, number, and sometimes voice.' },
+    explanation: 'Every complete sentence needs a verb. Action verbs show what happens, while linking verbs connect a subject to information about it.',
+    examples: [{ sentence: 'The children laughed loudly.' }, { sentence: 'The soup smells delicious.' }],
+    commonMistakes: [{ incorrect: 'She walk to work.', correct: 'She walks to work.', explanation: 'In the present simple, he, she, and it usually take -s.' }], signalWords: ['action', 'event', 'state'],
+  },
+  {
+    id: 'adjectives', title: 'Adjectives', category: 'parts-of-speech', description: 'Describe or give more information about nouns.',
+    formula: { structure: 'Adjective + noun / Linking verb + adjective', breakdown: 'Adjectives can describe size, color, age, opinion, and many other qualities.' },
+    explanation: 'Adjectives make writing more precise by describing nouns or pronouns. They often come before a noun or after a linking verb.',
+    examples: [{ sentence: 'We bought a comfortable chair.' }, { sentence: 'The sky became dark.' }],
+    commonMistakes: [{ incorrect: 'She sings beautiful.', correct: 'She sings beautifully.', explanation: 'Use an adverb to describe how an action is performed.' }], signalWords: ['what kind', 'which one', 'how many'],
+  },
 ]
 
 export function getPartsLessonBySlug(slug: string) {
