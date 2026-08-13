@@ -1,4 +1,3 @@
-// import { Navbar } from '@/components/navbar'
 import { LessonCard } from '@/components/lesson-card'
 import { getCategoryBySlug } from '@/data/grammar/categories'
 import { sentenceStructureLessons } from '@/data/grammar/sentence-structure'
@@ -15,7 +14,6 @@ export default function SentenceStructurePage() {
 
     return (
         <>
-            {/* <Navbar /> */}
             <main className="min-h-screen bg-background">
                 <div className="px-4 py-12 sm:py-16">
                     <div className="mx-auto max-w-4xl">

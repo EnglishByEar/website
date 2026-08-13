@@ -1,7 +1,6 @@
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
 import { ArrowLeft, ArrowRight } from 'lucide-react'
-// import { Navbar } from '@/components/navbar'
 import { FormulaCard } from '@/components/formula-card'
 import { ExampleCard } from '@/components/example-card'
 import { MistakeCard } from '@/components/mistake-card'
@@ -48,7 +47,6 @@ export default async function SentenceLessonPage({ params }: LessonPageProps) {
 
     return (
         <>
-            {/* <Navbar /> */}
             <main className="min-h-screen bg-background">
                 <article className="px-4 py-12 sm:py-16">
                     <div className="mx-auto max-w-3xl">
