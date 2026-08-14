@@ -1,25 +1,19 @@
 import React from 'react'
-import Head from "next/head";
-import podcastJsonLd from "@/data/podcastData";
-import { Headphones } from 'lucide-react';
-import podcastData from '@/lib/podcast.json'
-import Link from 'next/link';
+import type { Metadata } from 'next';
+import podcastData from '@/data/podcast.json'
 import PodcastCard from '@/components/podcastCard';
 import { Episode } from '@/types/podcast';
+
+
+export const metadata: Metadata = {
+  title: "English Learning Podcast | English By Ear",
+  description: "A weekly show that helps English learners improve vocabulary, pronunciation, and cultural understanding."
+}
 
 export default function Podcast() {
   const episodes = podcastData;
   return (
     <>
-      <Head>
-        <title>{podcastJsonLd.name}</title>
-        <meta name="description" content={podcastJsonLd.description} />
-        <link rel="icon" href="/favicon.ico" />
-        <script
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(podcastJsonLd) }}
-        />
-      </Head>
 
       <main className="flex-1">
         <section className="container py-12 md:py-24 lg:py-32">
@@ -40,8 +34,6 @@ export default function Podcast() {
             ))}
           </div>
         </section>
-
-
       </main>
 
     </>
