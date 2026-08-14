@@ -10,7 +10,7 @@ export default function HeroSection() {
             <Pattern />
             <div className="mx-auto flex max-w-[980px] flex-col items-center gap-4 text-center">
                 <div className="flex flex-col items-center gap-4">
-                    <p className="float-text"><Logo width={150} height={150} /></p>
+                    <p className="float-text"><Logo width={200} height={200} /></p>
                     <h1 className="text-3xl md:text-5xl lg:text-6xl font-bold">
                         Master English Listening Skills with EnglishByEar
                     </h1>
