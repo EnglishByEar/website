@@ -1,5 +1,5 @@
 import type { Episode } from "../types/podcast"
-import podcastData from "./podcast.json"
+import podcastData from "@/data/podcast.json"
 
 export async function getPodcasts(): Promise<Episode[]> {
     return podcastData
