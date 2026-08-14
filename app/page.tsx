@@ -10,6 +10,7 @@ import SplashScreen from "@/components/SplashScreen"
 import HeroSection from "@/components/hero-section"
 import FeatureSection from "@/components/feature-section"
 import GrammarSection from "@/components/grammar-section"
+import Header from "@/components/header"
 
 export default function Home() {
   const { supabase, user } = useSupabase()
@@ -41,24 +42,7 @@ export default function Home() {
 
   return (
     <div className="flex min-h-screen flex-col">
-      <header className="sticky top-0 z-40 border-b bg-background">
-        <div className="container flex h-16 items-center justify-between py-4">
-          <div className="flex items-center">
-            <span className="text-base md:text-xl font-bold ">EnglishByEar</span>
-          </div>
-          <nav className="flex items-center gap-4">
-            <Link href="/podcast" className="hidden md:block">
-              <Button variant="outline">Podcast</Button>
-            </Link>
-            <Link href="/login">
-              <Button variant="outline">Login</Button>
-            </Link>
-            <Link href="/register">
-              <Button>Sign Up</Button>
-            </Link>
-          </nav>
-        </div>
-      </header>
+      <Header />
       <main className="flex-1">
 
         <HeroSection />
