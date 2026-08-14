@@ -2,21 +2,19 @@
 
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
-import { Headphones, BarChart2, Trophy, Clock } from "lucide-react"
+import { Clock } from "lucide-react"
 import { useSupabase } from "@/components/supabase-provider"
 import { useRouter } from "next/navigation"
-import Pattern from "@/components/pattern"
-import { grammarCategories } from "@/data/grammar/categories"
-import { CategoryCard } from "@/components/category-card"
 import { useState, useEffect } from "react"
 import SplashScreen from "@/components/SplashScreen"
 import HeroSection from "@/components/hero-section"
+import FeatureSection from "@/components/feature-section"
+import GrammarSection from "@/components/grammar-section"
 
 export default function Home() {
   const { supabase, user } = useSupabase()
   const [isLoading, setIsLoading] = useState(true)
   const router = useRouter()
-  const featuredCategories = grammarCategories.slice(0, 3);
 
   useEffect(() => {
     const initialize = async () => {
@@ -62,69 +60,15 @@ export default function Home() {
         </div>
       </header>
       <main className="flex-1">
+
         <HeroSection />
 
-        <section className="px-4">
-          <section className="container py-12 md:py-24 rounded-3xl lg:py-32 w-full">
-            <div className="mx-auto grid items-center gap-12 py-12 lg:grid-cols-3">
-              <div className="flex flex-col items-center gap-2 text-center">
-                <div className="flex h-16 w-16 items-center justify-center rounded-full bg-primary/10">
-                  <Headphones className="h-8 w-8 text-primary" />
-                </div>
-                <h3 className="text-xl font-bold">Listen & Type</h3>
-                <p className="text-muted-foreground">
-                  Listen to English texts and type what you hear to improve your comprehension
-                </p>
-              </div>
-              <div className="flex flex-col items-center gap-2 text-center">
-                <div className="flex h-16 w-16 items-center justify-center rounded-full bg-primary/10">
-                  <BarChart2 className="h-8 w-8 text-primary" />
-                </div>
-                <h3 className="text-xl font-bold">Track Progress</h3>
-                <p className="text-muted-foreground">
-                  Monitor your improvement with detailed statistics and performance metrics
-                </p>
-              </div>
-              <div className="flex flex-col items-center gap-2 text-center">
-                <div className="flex h-16 w-16 items-center justify-center rounded-full bg-primary/10">
-                  <Trophy className="h-8 w-8 text-primary" />
-                </div>
-                <h3 className="text-xl font-bold">Compete & Achieve</h3>
-                <p className="text-muted-foreground">
-                  Join leaderboards and complete daily challenges to earn achievements
-                </p>
-              </div>
-            </div>
-          </section>
-        </section>
+        <FeatureSection />
 
-        <section id="featured" className="container px-4 py-12 sm:py-16">
-          <div>
-            <div className="mb-12 flex justify-between items-center gap-4 flex-col sm:flex-row">
-              <div>
-                <h2 className="text-3xl font-bold text-foreground mb-4">Featured Topics</h2>
-                <p className="text-foreground/70">
-                  Start with these popular grammar categories to build a strong foundation.
-                </p>
-              </div>
-              <div className="text-center pt-6">
-                <Link
-                  href="/grammar"
-                  className="inline-flex items-center text-primary font-semibold hover:opacity-80 transition-opacity"
-                >
-                  View All Topics →
-                </Link>
-              </div>
-            </div>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">
-              {featuredCategories.map((category) => (
-                <CategoryCard key={category.id} category={category} />
-              ))}
-            </div>
-          </div>
-        </section>
+        <GrammarSection />
 
-        <section className="container py-12 md:py-24 lg:py-32">
+        <section className="container relative py-12 md:py-24 lg:py-32">
+          <div className="w-[550px] h-[550px] absolute right-[70px] top-60 origin-top-left rotate-[-33.39deg] rounded-full bg-primary/20 blur-2xl z-0" />
           <div className="grid gap-6 lg:grid-cols-2">
             <div className="flex flex-col justify-center gap-4">
               <h2 className="text-3xl font-bold tracking-tighter md:text-4xl">Three Difficulty Levels</h2>
