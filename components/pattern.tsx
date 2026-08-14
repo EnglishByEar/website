@@ -2,7 +2,7 @@ import React from 'react'
 
 export default function Pattern() {
     return (
-        <div className="absolute inset-0 -z-10 rounded-3xl overflow-hidden">
+        <div className='absolute overflow-hidden inset-0 -z-10'>
             <svg
                 width="100%"
                 height="100%"

@@ -3,15 +3,14 @@
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
 import { Headphones, BarChart2, Trophy, Clock } from "lucide-react"
-import Footer from "@/components/footer"
 import { useSupabase } from "@/components/supabase-provider"
 import { useRouter } from "next/navigation"
-import Logo from "@/components/Logo";
 import Pattern from "@/components/pattern"
 import { grammarCategories } from "@/data/grammar/categories"
 import { CategoryCard } from "@/components/category-card"
 import { useState, useEffect } from "react"
 import SplashScreen from "@/components/SplashScreen"
+import HeroSection from "@/components/hero-section"
 
 export default function Home() {
   const { supabase, user } = useSupabase()
@@ -63,36 +62,11 @@ export default function Home() {
         </div>
       </header>
       <main className="flex-1">
-        <section className="container py-16 md:py-24 lg:py-32">
-          <div className="mx-auto flex max-w-[980px] flex-col items-center gap-4 text-center">
-            <div className="flex flex-col items-center gap-4">
-              <p className="float-text"><Logo width={150} height={150} /></p>
-              <h1 className="text-3xl md:text-5xl lg:text-6xl font-bold">
-                Master English Listening Skills with EnglishByEar
-              </h1>
-            </div>
-            <p className="max-w-[750px] text-lg text-muted-foreground sm:text-xl">
-              Practice listening to English texts at your own pace and track your progress over time.
-            </p>
-            <div className="flex flex-col gap-4 sm:flex-row">
-              <Link href="/register">
-                <Button size="lg" className="w-full sm:w-auto">
-                  Get Started
-                </Button>
-              </Link>
-              <Link href="/about">
-                <Button size="lg" variant="outline" className="w-full sm:w-auto">
-                  Learn More
-                </Button>
-              </Link>
-            </div>
-          </div>
-        </section>
+        <HeroSection />
 
-        <section className="container px-4">
-          <section className="relative py-12 md:py-24 rounded-3xl lg:py-32 w-full">
-            <Pattern />
-            <div className="mx-auto grid max-w-5xl items-center gap-6 py-12 lg:grid-cols-3">
+        <section className="px-4">
+          <section className="container py-12 md:py-24 rounded-3xl lg:py-32 w-full">
+            <div className="mx-auto grid items-center gap-12 py-12 lg:grid-cols-3">
               <div className="flex flex-col items-center gap-2 text-center">
                 <div className="flex h-16 w-16 items-center justify-center rounded-full bg-primary/10">
                   <Headphones className="h-8 w-8 text-primary" />
