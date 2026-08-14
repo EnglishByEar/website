@@ -1,4 +1,4 @@
-const podcastJsonLd = {
+const podcastJsonId = {
   "@context": "https://schema.org",
   "@type": "PodcastSeries",
   "name": "The English Learning Podcast",
@@ -54,4 +54,4 @@ const podcastJsonLd = {
   ]
 };
 
-export default podcastJsonLd;
+export default podcastJsonId;
