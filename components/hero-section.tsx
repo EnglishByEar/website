@@ -8,9 +8,9 @@ export default function HeroSection() {
     return (
         <section className="container py-16 md:py-24 lg:py-32 min-h-screen flex justify-center items-center">
             <Pattern />
-            <div className="mx-auto flex max-w-[980px] flex-col items-center gap-4 text-center">
+            <div className="mx-auto flex max-w-[980px] flex-col items-center gap-16 text-center">
                 <div className="flex flex-col items-center gap-4">
-                    <p className="float-text"><Logo width={200} height={200} /></p>
+                    <p className="float-text h-52 w-52 md:h-64 md:w-64"><Logo width={300} height={300} /></p>
                     <h1 className="text-3xl md:text-5xl lg:text-6xl font-bold">
                         Master English Listening Skills with EnglishByEar
                     </h1>
