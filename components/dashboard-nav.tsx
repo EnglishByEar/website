@@ -14,8 +14,9 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
-import { Headphones, LayoutDashboard, BookOpen, Trophy, BarChart2, Settings, LogOut, Menu, X } from "lucide-react"
+import { LayoutDashboard, BookOpen, BarChart2, Settings, LogOut, Menu, X } from "lucide-react"
 import { useToast } from "@/hooks/use-toast"
+import Logo from "./Logo"
 
 export default function DashboardNav() {
   const pathname = usePathname()
@@ -26,33 +27,26 @@ export default function DashboardNav() {
   const [avatarUrl, setAvatarUrl] = useState<string | null>(null)
 
   useEffect(() => {
+    if (!user || !supabase) return
+
     const fetchAvatar = async () => {
-      if (!user || !supabase) return
+      const { data, error } = await supabase
+        .from("profiles")
+        .select("avatar_url")
+        .eq("id", user.id)
+        .maybeSingle()
 
-      try {
-        const { data, error } = await supabase
-          .from("profiles")
-          .select("avatar_url")
-          .eq("id", user.id)
-          .single()
-
-        if (error) {
-          // PGRST116 = no row found (profile not created yet)
-          // 42P01    = table doesn't exist yet (migration not run)
-          const isExpected =
-            error.code === "PGRST116" ||
-            error.code === "42P01" ||
-            error.message?.includes("does not exist")
-          if (!isExpected) {
-            console.error("Error fetching avatar:", error)
-          }
-          return
-        }
-
-        setAvatarUrl(data?.avatar_url || null)
-      } catch (error) {
-        console.error("Error fetching avatar:", error)
+      if (error) {
+        console.error("Error fetching avatar:", {
+          code: error.code,
+          message: error.message,
+          details: error.details,
+          hint: error.hint,
+        })
+        return
       }
+
+      setAvatarUrl(data?.avatar_url ?? null)
     }
 
     fetchAvatar()
@@ -80,16 +74,16 @@ export default function DashboardNav() {
     { name: "Dashboard", href: "/dashboard", icon: LayoutDashboard },
     { name: "Exercises", href: "/dashboard/exercises", icon: BookOpen },
     // { name: "Leaderboard", href: "/dashboard/leaderboard", icon: Trophy },
-    { name: "Progress", href: "/dashboard/progress", icon: BarChart2 },
+    // { name: "Progress", href: "/dashboard/progress", icon: BarChart2 },
     { name: "Settings", href: "/dashboard/settings", icon: Settings },
   ]
 
   return (
-    <header className="sticky top-0 z-40 border-b bg-background">
-      <div className="container flex h-16 items-center justify-between py-4">
+    <header className="top-0 z-40 container rounded-2xl my-4 bg-white/10 shadow-2xl shadow-black/20 backdrop-blur-xl backdrop-saturate-150">
+      <div className="flex items-center justify-between py-2">
         <div className="flex items-center gap-2">
           <Link href="/dashboard" className="flex items-center gap-2">
-            <Headphones className="h-6 w-6 text-primary" />
+            <Logo />
             <span className="text-xl font-bold">EnglishByEar</span>
           </Link>
         </div>
