@@ -13,7 +13,6 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 import { Headphones, EyeClosed, Eye } from "lucide-react"
 import { useToast } from "@/hooks/use-toast"
 import Logo from "@/components/Logo"
-import InovateStyle from "@/components/InovateStyle"
 import Pattern from "@/components/pattern"
 
 export default function LoginPage() {
