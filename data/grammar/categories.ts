@@ -39,7 +39,7 @@ export const grammarCategories: GrammarCategory[] = [
   {
     id: 'modifiers',
     title: 'Modifiers',
-    description: 'Understand how to use adjectives and adverbs',
+    description: 'Make your writing clearer and more vivid by learning how adjectives, adverbs, and phrases add detail to sentences.',
     slug: 'modifiers',
     lessonCount: 5,
   },
