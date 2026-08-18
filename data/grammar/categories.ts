@@ -32,7 +32,7 @@ export const grammarCategories: GrammarCategory[] = [
   {
     id: 'prepositions',
     title: 'Prepositions',
-    description: 'Learn when and how to use prepositions correctly',
+    description: 'Learn how prepositions connect ideas and describe time, place, movement, relationships, and context.',
     slug: 'prepositions',
     lessonCount: 6,
   },
