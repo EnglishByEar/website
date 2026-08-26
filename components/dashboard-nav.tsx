@@ -75,19 +75,18 @@ export default function DashboardNav() {
     { name: "Dashboard", href: "/dashboard", icon: LayoutDashboard },
     { name: "Exercises", href: "/dashboard/exercises", icon: BookOpen },
     { name: "Grammar", href: "/dashboard/grammar", icon: BookMarked },
-    { name: "Grammar", href: "/dashboard/vocabulary", icon: ArrowDownZA },
+    { name: "Vocabulary", href: "/dashboard/vocabulary", icon: ArrowDownZA },
     // { name: "Leaderboard", href: "/dashboard/leaderboard", icon: Trophy },
     // { name: "Progress", href: "/dashboard/progress", icon: BarChart2 },
     { name: "Settings", href: "/dashboard/settings", icon: Settings },
   ]
 
   return (
-    <header className="top-0 z-40 container rounded-2xl my-4 bg-white/10 shadow-2xl shadow-black/20 backdrop-blur-xl backdrop-saturate-150">
+    <header className="top-0 z-40 container rounded-xl my-4 bg-white/10 shadow-2xl shadow-black/20 backdrop-blur-xl backdrop-saturate-150">
       <div className="flex items-center justify-between py-2">
         <div className="flex items-center gap-2">
           <Link href="/dashboard" className="flex items-center gap-2">
-            <Logo />
-            <span className="text-xl font-bold">EnglishByEar</span>
+            <Logo width={60} height={60} />
           </Link>
         </div>
 
