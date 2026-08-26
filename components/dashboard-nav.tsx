@@ -14,7 +14,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
-import { LayoutDashboard, BookOpen, BarChart2, Settings, LogOut, Menu, X } from "lucide-react"
+import { LayoutDashboard, BookOpen, BookMarked, ArrowDownZA, Settings, LogOut, Menu, X } from "lucide-react"
 import { useToast } from "@/hooks/use-toast"
 import Logo from "./Logo"
 
@@ -43,10 +43,11 @@ export default function DashboardNav() {
           details: error.details,
           hint: error.hint,
         })
+        console.error("Error fetching avatar2:", error)
         return
       }
 
-      setAvatarUrl(data?.avatar_url ?? null)
+      setAvatarUrl(data?.avatar_url === "man" ? "/avatars/man.jpg" : "/avatars/woman.jpg")
     }
 
     fetchAvatar()
@@ -73,6 +74,8 @@ export default function DashboardNav() {
   const navItems = [
     { name: "Dashboard", href: "/dashboard", icon: LayoutDashboard },
     { name: "Exercises", href: "/dashboard/exercises", icon: BookOpen },
+    { name: "Grammar", href: "/dashboard/grammar", icon: BookMarked },
+    { name: "Grammar", href: "/dashboard/vocabulary", icon: ArrowDownZA },
     // { name: "Leaderboard", href: "/dashboard/leaderboard", icon: Trophy },
     // { name: "Progress", href: "/dashboard/progress", icon: BarChart2 },
     { name: "Settings", href: "/dashboard/settings", icon: Settings },
