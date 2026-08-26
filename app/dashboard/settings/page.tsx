@@ -2,7 +2,7 @@
 
 import type React from "react"
 
-import { useState, useEffect, useRef } from "react"
+import { useState, useEffect, } from "react"
 import { useSupabase } from "@/components/supabase-provider"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -14,6 +14,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Separator } from "@/components/ui/separator"
 import { useToast } from "@/hooks/use-toast"
+import Image from "next/image"
 
 export default function SettingsPage() {
   const { supabase, user } = useSupabase()
@@ -25,7 +26,7 @@ export default function SettingsPage() {
     fullName: "",
     bio: "",
     nativeLanguage: "english",
-    avatar_url: "",
+    avatar_url: "man",
   })
   const [preferences, setPreferences] = useState({
     darkMode: true,
@@ -35,8 +36,8 @@ export default function SettingsPage() {
     defaultDifficulty: "simple",
   })
 
-  const [avatarUploading, setAvatarUploading] = useState(false)
-  const fileInputRef = useRef<HTMLInputElement>(null)
+  // const [avatarUploading, setAvatarUploading] = useState(false)
+  // const fileInputRef = useRef<HTMLInputElement>(null)
 
   useEffect(() => {
     const fetchProfile = async () => {
@@ -59,7 +60,7 @@ export default function SettingsPage() {
           fullName: data.full_name || "",
           bio: data.bio || "",
           nativeLanguage: data.native_language || "english",
-          avatar_url: data.avatar_url || "",
+          avatar_url: data.avatar_url || "man",
         })
 
         // In a real app, you would fetch preferences from the database
@@ -94,6 +95,7 @@ export default function SettingsPage() {
           full_name: profile.fullName,
           bio: profile.bio,
           native_language: profile.nativeLanguage,
+          avatar_url: profile.avatar_url,
           updated_at: new Date().toISOString(),
         })
         .eq("id", user?.id)
@@ -144,100 +146,15 @@ export default function SettingsPage() {
     })
   }
 
-  const handleAvatarUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
-    const file = event.target.files?.[0]
-    if (!file || !user || !supabase) return
 
-    // Validate file type
-    if (!file.type.startsWith("image/")) {
-      toast({
-        title: "Invalid file type",
-        description: "Please select an image file (JPG, PNG, GIF, etc.)",
-        variant: "destructive",
-      })
-      return
+  const getAvatarSrc = (avatar: string) => {
+    switch (avatar) {
+      case "woman":
+        return "/avatars/woman.jpg"
+      case "man":
+      default:
+        return "/avatars/man.jpg"
     }
-
-    // Validate file size (max 5MB)
-    if (file.size > 5 * 1024 * 1024) {
-      toast({
-        title: "File too large",
-        description: "Please select an image smaller than 5MB",
-        variant: "destructive",
-      })
-      return
-    }
-
-    setAvatarUploading(true)
-
-    try {
-      // Create a unique filename and put it in the user-id folder
-      const fileExt = file.name.split(".").pop()
-      const fileName = `avatar-${Date.now()}.${fileExt}`
-      const filePath = `${user.id}/${fileName}` // <- satisfies RLS policy
-
-      // Upload to Supabase Storage
-      const { error: uploadError } = await supabase.storage.from("avatars").upload(filePath, file)
-
-      if (uploadError) {
-        // If bucket doesn't exist, show helpful message
-        if (uploadError.message.includes("Bucket not found")) {
-          toast({
-            title: "Storage not configured",
-            description: "Avatar uploads require Supabase Storage setup. Contact your administrator.",
-            variant: "destructive",
-          })
-          return
-        }
-        throw uploadError
-      }
-
-      // Get the public URL
-      const {
-        data: { publicUrl },
-      } = supabase.storage.from("avatars").getPublicUrl(filePath)
-
-      // Update user profile with new avatar URL
-      const { error: updateError } = await supabase
-        .from("profiles")
-        .update({
-          avatar_url: publicUrl,
-          updated_at: new Date().toISOString(),
-        })
-        .eq("id", user.id)
-
-      if (updateError) {
-        // If profiles table doesn't exist, just show success anyway
-        if (!(updateError.code === "42P01" || updateError.message?.includes("does not exist"))) {
-          throw updateError
-        }
-      }
-
-      // Update local profile state
-      setProfile((prev) => ({ ...prev, avatar_url: publicUrl }))
-
-      toast({
-        title: "Avatar updated",
-        description: "Your profile picture has been updated successfully.",
-      })
-    } catch (error: any) {
-      console.error("Avatar upload error:", error)
-      toast({
-        title: "Upload failed",
-        description: error.message || "There was an error uploading your avatar.",
-        variant: "destructive",
-      })
-    } finally {
-      setAvatarUploading(false)
-      // Clear the file input
-      if (fileInputRef.current) {
-        fileInputRef.current.value = ""
-      }
-    }
-  }
-
-  const triggerFileInput = () => {
-    fileInputRef.current?.click()
   }
 
   return (
@@ -261,27 +178,70 @@ export default function SettingsPage() {
             <form onSubmit={handleProfileUpdate}>
               <CardContent className="space-y-6">
                 <div className="flex flex-col gap-6 sm:flex-row">
-                  <div className="flex flex-col items-center gap-2">
+                  <div className="flex flex-col items-center gap-4">
                     <Avatar className="h-24 w-24">
                       <AvatarImage
-                        src={profile.avatar_url || "/user.png"}
+                        src={getAvatarSrc(profile.avatar_url)}
                         alt={profile.username}
                       />
-                      <AvatarFallback>{profile.username.charAt(0).toUpperCase()}</AvatarFallback>
+                      <AvatarFallback>
+                        {profile.username.charAt(0).toUpperCase()}
+                      </AvatarFallback>
                     </Avatar>
-                    <Button variant="outline" size="sm" onClick={triggerFileInput} disabled={avatarUploading}>
-                      {avatarUploading ? "Uploading..." : "Change Avatar"}
-                    </Button>
-                    <input
-                      ref={fileInputRef}
-                      type="file"
-                      accept="image/*"
-                      onChange={handleAvatarUpload}
-                      className="hidden"
-                    />
-                    <p className="text-xs text-muted-foreground text-center max-w-[200px]">
-                      JPG, PNG or GIF. Max size 5MB.
-                    </p>
+
+                    <div className="space-y-2">
+                      <Label>Profile Picture</Label>
+
+                      <div className="flex gap-3">
+                        <button
+                          type="button"
+                          onClick={() =>
+                            setProfile((prev) => ({
+                              ...prev,
+                              avatar_url: "man",
+                            }))
+                          }
+                          className={`rounded-xl border-2 p-2 transition ${profile.avatar_url === "man"
+                            ? "border-primary"
+                            : "border-transparent hover:border-muted-foreground"
+                            }`}
+                        >
+                          <Image
+                            src="/avatars/man.jpg"
+                            height={50}
+                            width={50}
+                            alt="Man"
+                            className="h-16 w-16 rounded-full object-cover"
+                          />
+                        </button>
+
+                        <button
+                          type="button"
+                          onClick={() =>
+                            setProfile((prev) => ({
+                              ...prev,
+                              avatar_url: "woman",
+                            }))
+                          }
+                          className={`rounded-xl border-2 p-2 transition ${profile.avatar_url === "woman"
+                            ? "border-primary"
+                            : "border-transparent hover:border-muted-foreground"
+                            }`}
+                        >
+                          <Image
+                            src="/avatars/woman.jpg"
+                            height={50}
+                            width={50}
+                            alt="Woman"
+                            className="h-16 w-16 rounded-full object-cover"
+                          />
+                        </button>
+                      </div>
+
+                      <p className="text-xs text-muted-foreground">
+                        Choose your profile picture.
+                      </p>
+                    </div>
                   </div>
                   <div className="grid flex-1 gap-4">
                     <div className="grid gap-2">
@@ -289,7 +249,7 @@ export default function SettingsPage() {
                       <Input
                         id="username"
                         value={profile.username}
-                        onChange={(e) => setProfile({ ...profile, username: e.target.value })}
+                        disabled
                       />
                     </div>
                     <div className="grid gap-2">
