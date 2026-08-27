@@ -38,7 +38,7 @@
     --secondary-foreground: 0 0% 95%;
     --muted: 0 0% 30%;
     --muted-foreground: 0 0% 65%;
-    --accent: 217.4, 89%, 60.8%;
+    --accent: 39 100% 75%;
     --accent-foreground: 0 0% 12%;
     --destructive: 9 72% 65%;
     --border: 0 0% 100% / 12%;
@@ -114,4 +114,89 @@
   0%{transform:translateY(0);}
   50%{transform:translateY(-15px);}
   100%{transform:translateY(0);}
+}
+
+/* ---- Landing page animations ---- */
+
+/* Scroll reveal: elements start hidden/offset, animate in when .is-visible is added */
+.reveal {
+  opacity: 0;
+  transform: translateY(24px);
+  transition:
+    opacity 0.7s cubic-bezier(0.22, 1, 0.36, 1),
+    transform 0.7s cubic-bezier(0.22, 1, 0.36, 1);
+  will-change: opacity, transform;
+}
+.reveal.is-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Hero entrance: staggered fade-up on mount */
+@keyframes fade-up {
+  0% {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+.animate-fade-up {
+  opacity: 0;
+  animation: fade-up 0.8s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+
+/* Animated equalizer bars for the hero waveform */
+@keyframes wave {
+  0%,
+  100% {
+    transform: scaleY(0.35);
+  }
+  50% {
+    transform: scaleY(1);
+  }
+}
+.animate-wave {
+  transform-origin: center;
+  animation: wave 1.4s ease-in-out infinite;
+}
+
+/* Subtle pulsing glow for the status dot */
+@keyframes pulse-ring {
+  0% {
+    box-shadow: 0 0 0 0 hsl(var(--primary) / 0.5);
+  }
+  70% {
+    box-shadow: 0 0 0 6px hsl(var(--primary) / 0);
+  }
+  100% {
+    box-shadow: 0 0 0 0 hsl(var(--primary) / 0);
+  }
+}
+.animate-pulse-ring {
+  animation: pulse-ring 2s ease-out infinite;
+}
+
+/* Arrow nudge on hover for CTA links/buttons */
+.arrow-nudge {
+  transition: transform 0.25s ease;
+}
+.group:hover .arrow-nudge {
+  transform: translateX(4px);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .reveal,
+  .animate-fade-up,
+  .animate-wave,
+  .animate-pulse-ring,
+  .arrow-nudge,
+  .float-text {
+    animation: none !important;
+    transition: none !important;
+    opacity: 1 !important;
+    transform: none !important;
+  }
 }
