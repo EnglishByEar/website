@@ -1,39 +1,42 @@
 import { BarChart2, Headphones, Trophy } from 'lucide-react'
 import React from 'react'
 
+const features = [
+    {
+        icon: Headphones,
+        title: 'Listen & type',
+        description:
+            'Listen to English texts and type what you hear to sharpen your comprehension.',
+    },
+    {
+        icon: BarChart2,
+        title: 'Track progress',
+        description:
+            'Monitor your improvement with detailed statistics and performance metrics.',
+    },
+    {
+        icon: Trophy,
+        title: 'Compete & achieve',
+        description:
+            'Join leaderboards and complete daily challenges to earn achievements.',
+    },
+]
+
 export default function FeatureSection() {
     return (
-        <section className="px-4">
-            <div className="container py-12 md:py-24 rounded-3xl lg:py-32 w-full">
-                <div className="mx-auto grid items-center gap-12 py-12 lg:grid-cols-3">
-                    <div className="flex flex-col items-center gap-2 text-center">
-                        <div className="flex h-16 w-16 items-center justify-center rounded-full bg-primary/10">
-                            <Headphones className="h-8 w-8 text-primary" />
+        <section className="container border-t border-border py-20 md:py-28">
+            <div className="grid gap-10 md:grid-cols-3 md:gap-8">
+                {features.map((feature) => (
+                    <div key={feature.title} className="flex flex-col gap-4">
+                        <div className="flex h-12 w-12 items-center justify-center rounded-lg border border-border bg-card">
+                            <feature.icon className="h-5 w-5 text-primary" />
                         </div>
-                        <h3 className="text-xl font-bold">Listen & Type</h3>
-                        <p className="text-muted-foreground">
-                            Listen to English texts and type what you hear to improve your comprehension
+                        <h3 className="text-lg font-semibold">{feature.title}</h3>
+                        <p className="text-muted-foreground leading-relaxed">
+                            {feature.description}
                         </p>
                     </div>
-                    <div className="flex flex-col items-center gap-2 text-center">
-                        <div className="flex h-16 w-16 items-center justify-center rounded-full bg-primary/10">
-                            <BarChart2 className="h-8 w-8 text-primary" />
-                        </div>
-                        <h3 className="text-xl font-bold">Track Progress</h3>
-                        <p className="text-muted-foreground">
-                            Monitor your improvement with detailed statistics and performance metrics
-                        </p>
-                    </div>
-                    <div className="flex flex-col items-center gap-2 text-center">
-                        <div className="flex h-16 w-16 items-center justify-center rounded-full bg-primary/10">
-                            <Trophy className="h-8 w-8 text-primary" />
-                        </div>
-                        <h3 className="text-xl font-bold">Compete & Achieve</h3>
-                        <p className="text-muted-foreground">
-                            Join leaderboards and complete daily challenges to earn achievements
-                        </p>
-                    </div>
-                </div>
+                ))}
             </div>
         </section>
     )
