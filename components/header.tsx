@@ -1,24 +1,25 @@
 import React from 'react'
 import Link from 'next/link'
 import { Button } from './ui/button'
-
+import Logo from './Logo'
 
 export default function Header() {
     return (
-        <header className="top-0 z-40 container rounded-2xl my-4 bg-white/10 shadow-2xl shadow-black/20 backdrop-blur-xl backdrop-saturate-150">
-            <div className="flex h-16 items-center justify-between py-4 ">
-                <div className="flex items-center">
-                    <span className="text-base md:text-xl font-bold ">EnglishByEar</span>
-                </div>
-                <nav className="flex items-center gap-4">
+        <header className="sticky top-0 z-40 border-b border-border bg-background/0 backdrop-blur-xl">
+            <div className="container flex h-16 items-center justify-between">
+                <Link href="/" className="flex items-center gap-2">
+                    <Logo width={28} height={28} />
+                    <span className="text-base font-bold md:text-lg">EnglishByEar</span>
+                </Link>
+                <nav className="flex items-center gap-2 sm:gap-3">
                     <Link href="/podcast" className="hidden md:block">
-                        <Button variant="outline">Podcast</Button>
+                        <Button variant="ghost">Podcast</Button>
                     </Link>
                     <Link href="/login">
-                        <Button variant="outline">Login</Button>
+                        <Button variant="ghost">Login</Button>
                     </Link>
                     <Link href="/register">
-                        <Button>Sign Up</Button>
+                        <Button>Sign up</Button>
                     </Link>
                 </nav>
             </div>
