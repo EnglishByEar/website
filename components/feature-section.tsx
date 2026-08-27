@@ -1,5 +1,6 @@
 import { BarChart2, Headphones, Trophy } from 'lucide-react'
 import React from 'react'
+import Reveal from './reveal'
 
 const features = [
     {
@@ -26,16 +27,20 @@ export default function FeatureSection() {
     return (
         <section className="container border-t border-border py-20 md:py-28">
             <div className="grid gap-10 md:grid-cols-3 md:gap-8">
-                {features.map((feature) => (
-                    <div key={feature.title} className="flex flex-col gap-4">
-                        <div className="flex h-12 w-12 items-center justify-center rounded-lg border border-border bg-card">
-                            <feature.icon className="h-5 w-5 text-primary" />
+                {features.map((feature, i) => (
+                    <Reveal
+                        key={feature.title}
+                        delay={i * 120}
+                        className="group flex flex-col gap-4"
+                    >
+                        <div className="flex h-12 w-12 items-center justify-center rounded-lg border border-border bg-card transition-all duration-300 group-hover:-translate-y-1 group-hover:border-primary/50 group-hover:shadow-lg group-hover:shadow-primary/10">
+                            <feature.icon className="h-5 w-5 text-primary transition-transform duration-300 group-hover:scale-110" />
                         </div>
                         <h3 className="text-lg font-semibold">{feature.title}</h3>
                         <p className="text-muted-foreground leading-relaxed">
                             {feature.description}
                         </p>
-                    </div>
+                    </Reveal>
                 ))}
             </div>
         </section>

@@ -11,6 +11,7 @@ import HeroSection from "@/components/hero-section"
 import FeatureSection from "@/components/feature-section"
 import GrammarSection from "@/components/grammar-section"
 import Header from "@/components/header"
+import Reveal from "@/components/reveal"
 
 const difficultyLevels = [
   {
@@ -65,7 +66,7 @@ export default function Home() {
         {/* Difficulty levels */}
         <section className="container border-t border-border py-20 md:py-28">
           <div className="grid gap-12 lg:grid-cols-2 lg:gap-16">
-            <div className="flex flex-col justify-center gap-4">
+            <Reveal className="flex flex-col justify-center gap-4">
               <h2 className="text-3xl font-bold tracking-tight md:text-4xl">
                 Three difficulty levels
               </h2>
@@ -73,23 +74,28 @@ export default function Home() {
                 Choose from Simple, Medium, or Advanced exercises to match your current
                 skill level, then gradually increase the challenge as you improve.
               </p>
-              <Button onClick={goToExercise} className="mt-2 w-fit gap-2">
+              <Button onClick={goToExercise} className="group mt-2 w-fit gap-2">
                 Start an exercise
-                <ArrowRight className="h-4 w-4" />
+                <ArrowRight className="arrow-nudge h-4 w-4" />
               </Button>
-            </div>
+            </Reveal>
 
             <div className="flex flex-col divide-y divide-border rounded-xl border border-border bg-card">
-              {difficultyLevels.map((level) => (
-                <div key={level.label} className="flex items-start gap-4 p-6">
-                  <div className={`mt-1.5 h-2.5 w-2.5 shrink-0 rounded-full ${level.color}`} />
+              {difficultyLevels.map((level, i) => (
+                <Reveal
+                  as="div"
+                  key={level.label}
+                  delay={i * 120}
+                  className="group flex items-start gap-4 p-6 transition-colors hover:bg-muted/20"
+                >
+                  <div className={`mt-1.5 h-2.5 w-2.5 shrink-0 rounded-full transition-transform duration-300 group-hover:scale-125 ${level.color}`} />
                   <div>
                     <h3 className="font-semibold">{level.label}</h3>
                     <p className="mt-1 text-sm text-muted-foreground leading-relaxed">
                       {level.description}
                     </p>
                   </div>
-                </div>
+                </Reveal>
               ))}
             </div>
           </div>
@@ -97,7 +103,7 @@ export default function Home() {
 
         {/* Closing CTA */}
         <section className="container py-20 md:py-28">
-          <div className="flex flex-col items-center gap-6 rounded-2xl border border-border bg-card px-6 py-16 text-center">
+          <Reveal className="flex flex-col items-center gap-6 rounded-2xl border border-border bg-card px-6 py-16 text-center transition-colors duration-300 hover:border-primary/40">
             <h2 className="text-balance text-3xl font-bold tracking-tight md:text-4xl">
               Ready to train your ear?
             </h2>
@@ -105,12 +111,12 @@ export default function Home() {
               Join EnglishByEar and start improving your listening comprehension today.
             </p>
             <Link href="/register">
-              <Button size="lg" className="gap-2">
+              <Button size="lg" className="group gap-2">
                 Get started for free
-                <ArrowRight className="h-4 w-4" />
+                <ArrowRight className="arrow-nudge h-4 w-4" />
               </Button>
             </Link>
-          </div>
+          </Reveal>
         </section>
       </main>
     </div>
