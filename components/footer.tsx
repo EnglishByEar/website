@@ -3,8 +3,8 @@ import React from 'react'
 
 export default function Footer() {
   return (
-    <footer className="container rounded-xl my-4 py-1 bg-white/10 shadow-2xl shadow-black/20 backdrop-blur-xl backdrop-saturate-150">
-      <div className="flex flex-col items-center justify-between gap-4 md:h-16 md:flex-row">
+    <footer className="bottom-0 z-40 border-t border-border bg-background/0 backdrop-blur-xl">
+      <div className="container flex flex-col items-center justify-between gap-4 md:h-16 md:flex-row">
         <p className="text-center text-sm leading-loose text-muted-foreground md:text-left">
           © 2025 EnglishByEar. All rights reserved.
         </p>
