@@ -6,6 +6,7 @@ import { useEffect } from "react"
 import { useRouter } from "next/navigation"
 import { useSupabase } from "@/components/supabase-provider"
 import DashboardNav from "@/components/dashboard-nav"
+import Footer from "@/components/footer"
 
 export default function DashboardLayout({ children }: { children: React.ReactNode }) {
   const { supabase, user, isLoading } = useSupabase()
@@ -22,13 +23,16 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
   }
 
   if (!user) {
-    return null // Will redirect in the useEffect
+    return null
   }
 
   return (
     <div className="flex min-h-screen flex-col">
-      <DashboardNav />
-      <div className="flex-1 container py-8">{children}</div>
+      <div className="bg-primary/20 container p-2 mx-auto">
+        <DashboardNav />
+        <div className="container py-8 bg-background rounded-3xl mb-8">{children}</div>
+        <Footer />
+      </div>
     </div>
   )
 }

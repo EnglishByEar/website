@@ -28,7 +28,6 @@ export default function RootLayout({
             <Toaster />
           </SupabaseProvider>
         </ThemeProvider>
-        <Footer />
       </body>
     </html>
   )

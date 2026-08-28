@@ -360,13 +360,12 @@ export default function DashboardPage() {
                     </div>
                     <div className="flex items-center gap-2">
                       <div
-                        className={`text-sm font-medium ${
-                          exercise.accuracy >= 90
-                            ? "text-green-500"
-                            : exercise.accuracy >= 70
-                              ? "text-yellow-500"
-                              : "text-red-500"
-                        }`}
+                        className={`text-sm font-medium ${exercise.accuracy >= 90
+                          ? "text-green-500"
+                          : exercise.accuracy >= 70
+                            ? "text-yellow-500"
+                            : "text-red-500"
+                          }`}
                       >
                         {exercise.accuracy}%
                       </div>
