@@ -44,7 +44,7 @@ export default function SettingsPage() {
       if (!user || !supabase) return
 
       try {
-        const { data, error } = await supabase.from("profiles").select("*").eq("id", user.id).single()
+        const { data, error } = await supabase.from("profiles").select("*").eq("id", user.id).maybeSingle()
 
         if (error) {
           if (error.code === "42P01" || error.message?.includes("does not exist")) {
@@ -73,6 +73,7 @@ export default function SettingsPage() {
         })
       } catch (error) {
         console.error("Error fetching profile:", error)
+        console.log(error)
       }
     }
 
