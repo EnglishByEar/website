@@ -82,11 +82,11 @@ export default function DashboardNav() {
   ]
 
   return (
-    <header className="top-0 z-40 container rounded-xl my-4 bg-white/10 shadow-2xl shadow-black/20 backdrop-blur-xl backdrop-saturate-150">
-      <div className="flex items-center justify-between py-2">
+    <header className="top-0 z-40 my-4">
+      <div className="container flex items-center justify-between py-2">
         <div className="flex items-center gap-2">
           <Link href="/dashboard" className="flex items-center gap-2">
-            <Logo width={60} height={60} />
+            <Logo width={70} height={70} />
           </Link>
         </div>
 
@@ -151,7 +151,8 @@ export default function DashboardNav() {
       </div>
 
       {mobileMenuOpen && (
-        <div className="md:hidden border-t">
+
+        <div className="md:hidden overflow-hidden animate-in slide-in-from-top-2 fade-in-0 duration-200 bg-muted/40 backdrop-blur-md m-2 p-2 rounded-xl shadow-lg">
           <div className="container py-2">
             <nav className="grid gap-2">
               {navItems.map((item) => {
@@ -160,7 +161,7 @@ export default function DashboardNav() {
                   <Link
                     key={item.href}
                     href={item.href}
-                    className={`flex items-center gap-2 rounded-md p-2 text-sm font-medium transition-colors hover:bg-accent ${pathname === item.href ? "bg-accent" : ""
+                    className={`flex items-center gap-2 rounded-md p-2 text-sm font-medium transition-colors hover:bg-primary ${pathname === item.href ? "bg-primary" : ""
                       }`}
                     onClick={() => setMobileMenuOpen(false)}
                   >
