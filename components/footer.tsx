@@ -3,8 +3,8 @@ import React from 'react'
 
 export default function Footer() {
   return (
-    <footer className="bottom-0 mt-2">
-      <div className="container flex flex-col items-center justify-between gap-4 md:h-16 md:flex-row">
+    <footer className="bottom-0 mb-8">
+      <div className="container flex flex-col items-center justify-between gap-4 md:flex-row">
         <p className="text-center text-sm leading-loose text-muted-foreground md:text-left">
           © 2025 EnglishByEar. All rights reserved.
         </p>
