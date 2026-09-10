@@ -11,11 +11,14 @@ import { Slider } from "@/components/ui/slider"
 import { Progress } from "@/components/ui/progress"
 import { Play, Pause, RotateCcw, Volume2, VolumeX, AlertCircle } from "lucide-react"
 import { useToast } from "@/hooks/use-toast"
+import SupabaseClient from "@supabase/supabase-js/dist/module/SupabaseClient"
 
 export default function ExercisePage({ params }: { params: Promise<{ id: string }> }) {
   const router = useRouter()
   const { id } = use(params)
-  const { supabase, user } = useSupabase()
+  const supabaseContext = useSupabase()
+  const supabase: SupabaseClient | null = supabaseContext?.supabase ?? null
+  const user = supabaseContext.user
   const { toast } = useToast()
   const [isPlaying, setIsPlaying] = useState(false)
   const [userText, setUserText] = useState("")
