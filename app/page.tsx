@@ -12,6 +12,7 @@ import FeatureSection from "@/components/feature-section"
 import GrammarSection from "@/components/grammar-section"
 import Header from "@/components/header"
 import Reveal from "@/components/reveal"
+import Footer from "@/components/footer"
 
 const difficultyLevels = [
   {
@@ -119,6 +120,7 @@ export default function Home() {
           </Reveal>
         </section>
       </main>
+      <Footer />
     </div>
   )
 }
