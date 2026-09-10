@@ -59,7 +59,6 @@ export default function ExercisePage({ params }: { params: Promise<{ id: string 
           return
         }
 
-        // ---- MOCK EXERCISE FALLBACK ----
         const mockExercises = {
           "1": {
             id: 1,
@@ -375,148 +374,150 @@ export default function ExercisePage({ params }: { params: Promise<{ id: string 
   const results = submitted ? calculateResults() : null
 
   return (
-    <div className="grid gap-6">
-      <div className="flex items-center justify-between">
-        <div>
-          <h1 className="text-3xl font-bold tracking-tight">{exercise.title}</h1>
-          <div className="flex items-center gap-2 mt-1">
-            <Badge
-              variant={
-                exercise.difficulty === "Simple"
-                  ? "outline"
-                  : exercise.difficulty === "Medium"
-                    ? "secondary"
-                    : "destructive"
-              }
-            >
-              {exercise.difficulty}
-            </Badge>
-            <Badge variant="outline">{exercise.category}</Badge>
-            <span className="text-sm text-muted-foreground">{exercise.duration}</span>
+    <main className="min-h-screen bg-background">
+      <div className="grid gap-6">
+        <div className="flex items-center justify-between flex-col gap-4 md:flex-row">
+          <div>
+            <h1 className="text-3xl font-bold tracking-tight">{exercise.title}</h1>
+            <div className="flex items-center gap-2 mt-1">
+              <Badge
+                variant={
+                  exercise.difficulty === "Simple"
+                    ? "outline"
+                    : exercise.difficulty === "Medium"
+                      ? "secondary"
+                      : "destructive"
+                }
+              >
+                {exercise.difficulty}
+              </Badge>
+              <Badge variant="outline">{exercise.category}</Badge>
+              <span className="text-sm text-muted-foreground">{exercise.duration}</span>
+            </div>
           </div>
+          <Button variant="outline" onClick={() => router.push("/dashboard/exercises")}>
+            Back to Exercises
+          </Button>
         </div>
-        <Button variant="outline" onClick={() => router.push("/dashboard/exercises")}>
-          Back to Exercises
-        </Button>
-      </div>
 
-      <Card>
-        <CardHeader>
-          <CardTitle>Listening Exercise</CardTitle>
-          <CardDescription>
-            Listen to the audio and type what you hear. You can play the audio multiple times.
-          </CardDescription>
-        </CardHeader>
-        <CardContent className="space-y-6">
-          <div className="space-y-4">
-            <div className="flex items-center justify-between">
-              <div className="flex items-center gap-2">
-                {audioAvailable ? (
-                  <>
-                    <Button variant="outline" size="icon" onClick={togglePlay} disabled={submitted}>
-                      {isPlaying ? <Pause className="h-4 w-4" /> : <Play className="h-4 w-4" />}
-                    </Button>
-                    <Button variant="outline" size="icon" onClick={() => setMuted(!muted)} disabled={submitted}>
-                      {muted ? <VolumeX className="h-4 w-4" /> : <Volume2 className="h-4 w-4" />}
-                    </Button>
-                    <Button variant="outline" size="icon" onClick={resetExercise}>
-                      <RotateCcw className="h-4 w-4" />
-                    </Button>
-                  </>
-                ) : (
-                  <div className="flex items-center gap-2 text-sm text-muted-foreground">
-                    <AlertCircle className="h-4 w-4" />
-                    <span>Audio not available - read the text below after submitting</span>
+        <Card>
+          <CardHeader>
+            <CardTitle>Listening Exercise</CardTitle>
+            <CardDescription>
+              Listen to the audio and type what you hear. You can play the audio multiple times.
+            </CardDescription>
+          </CardHeader>
+          <CardContent className="space-y-6">
+            <div className="space-y-4">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-2">
+                  {audioAvailable ? (
+                    <>
+                      <Button variant="outline" size="icon" onClick={togglePlay} disabled={submitted}>
+                        {isPlaying ? <Pause className="h-4 w-4" /> : <Play className="h-4 w-4" />}
+                      </Button>
+                      <Button variant="outline" size="icon" onClick={() => setMuted(!muted)} disabled={submitted}>
+                        {muted ? <VolumeX className="h-4 w-4" /> : <Volume2 className="h-4 w-4" />}
+                      </Button>
+                      <Button variant="outline" size="icon" onClick={resetExercise}>
+                        <RotateCcw className="h-4 w-4" />
+                      </Button>
+                    </>
+                  ) : (
+                    <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                      <AlertCircle className="h-4 w-4" />
+                      <span>Audio not available - read the text below after submitting</span>
+                    </div>
+                  )}
+                </div>
+                {audioAvailable && (
+                  <div className="flex items-center gap-2">
+                    <span className="text-sm text-muted-foreground">Speed:</span>
+                    <div className="w-32">
+                      <Slider
+                        value={[playbackRate * 100]}
+                        min={50}
+                        max={150}
+                        step={25}
+                        onValueChange={(value) => setPlaybackRate(value[0] / 100)}
+                        disabled={submitted}
+                      />
+                    </div>
+                    <span className="text-sm">{playbackRate}x</span>
                   </div>
                 )}
               </div>
-              {audioAvailable && (
-                <div className="flex items-center gap-2">
-                  <span className="text-sm text-muted-foreground">Speed:</span>
-                  <div className="w-32">
-                    <Slider
-                      value={[playbackRate * 100]}
-                      min={50}
-                      max={150}
-                      step={25}
-                      onValueChange={(value) => setPlaybackRate(value[0] / 100)}
-                      disabled={submitted}
-                    />
-                  </div>
-                  <span className="text-sm">{playbackRate}x</span>
-                </div>
+              {audioAvailable && <Progress value={progress} />}
+            </div>
+
+            {showText && (
+              <div className="rounded-lg border p-4">
+                <h3 className="mb-2 font-medium">Original Text:</h3>
+                <p className="leading-relaxed">{exercise.text}</p>
+              </div>
+            )}
+
+            <div>
+              <Textarea
+                placeholder="Type what you hear..."
+                className="min-h-[150px]"
+                value={userText}
+                onChange={(e) => setUserText(e.target.value)}
+                disabled={submitted}
+              />
+              {!submitted && (
+                <p className="mt-2 text-sm text-muted-foreground">
+                  <AlertCircle className="inline h-4 w-4 mr-1" />
+                  The text will remain hidden until you submit your answer
+                </p>
               )}
             </div>
-            {audioAvailable && <Progress value={progress} />}
-          </div>
 
-          {showText && (
-            <div className="rounded-lg border p-4">
-              <h3 className="mb-2 font-medium">Original Text:</h3>
-              <p className="leading-relaxed">{exercise.text}</p>
-            </div>
-          )}
-
-          <div>
-            <Textarea
-              placeholder="Type what you hear..."
-              className="min-h-[150px]"
-              value={userText}
-              onChange={(e) => setUserText(e.target.value)}
-              disabled={submitted}
-            />
-            {!submitted && (
-              <p className="mt-2 text-sm text-muted-foreground">
-                <AlertCircle className="inline h-4 w-4 mr-1" />
-                The text will remain hidden until you submit your answer
-              </p>
-            )}
-          </div>
-
-          {submitted && results && (
-            <div className="rounded-lg border p-4 space-y-4">
-              <h3 className="font-medium">Your Results:</h3>
-              <div className="grid gap-4 sm:grid-cols-3">
-                <div className="space-y-2">
-                  <p className="text-sm text-muted-foreground">Accuracy</p>
-                  <div className="flex items-center gap-2">
-                    <Progress value={results.accuracy} className="h-2" />
-                    <span className="font-medium">{results.accuracy}%</span>
+            {submitted && results && (
+              <div className="rounded-lg border p-4 space-y-4">
+                <h3 className="font-medium">Your Results:</h3>
+                <div className="grid gap-4 sm:grid-cols-3">
+                  <div className="space-y-2">
+                    <p className="text-sm text-muted-foreground">Accuracy</p>
+                    <div className="flex items-center gap-2">
+                      <Progress value={results.accuracy} className="h-2" />
+                      <span className="font-medium">{results.accuracy}%</span>
+                    </div>
+                  </div>
+                  <div>
+                    <p className="text-sm text-muted-foreground">Mistakes</p>
+                    <p className="text-2xl font-bold">{results.mistakes}</p>
+                  </div>
+                  <div>
+                    <p className="text-sm text-muted-foreground">Words</p>
+                    <p className="text-2xl font-bold">{results.totalWords}</p>
                   </div>
                 </div>
-                <div>
-                  <p className="text-sm text-muted-foreground">Mistakes</p>
-                  <p className="text-2xl font-bold">{results.mistakes}</p>
-                </div>
-                <div>
-                  <p className="text-sm text-muted-foreground">Words</p>
-                  <p className="text-2xl font-bold">{results.totalWords}</p>
-                </div>
-              </div>
 
-              {/* Show comparison */}
-              <div className="space-y-2">
-                <h4 className="text-sm font-medium">Your Answer:</h4>
-                <div className="p-3 bg-muted rounded-md">
-                  <p className="text-sm">{userText}</p>
+                {/* Show comparison */}
+                <div className="space-y-2">
+                  <h4 className="text-sm font-medium">Your Answer:</h4>
+                  <div className="p-3 bg-muted rounded-md">
+                    <p className="text-sm">{userText}</p>
+                  </div>
                 </div>
               </div>
-            </div>
-          )}
-        </CardContent>
-        <CardFooter className="flex justify-between">
-          {!submitted ? (
-            <Button onClick={handleSubmit} disabled={userText.trim() === ""}>
-              Submit Answer
-            </Button>
-          ) : (
-            <Button onClick={resetExercise} variant="outline">
-              Try Again
-            </Button>
-          )}
-          {submitted && <Button onClick={() => router.push("/dashboard/exercises")}>Next Exercise</Button>}
-        </CardFooter>
-      </Card>
-    </div>
+            )}
+          </CardContent>
+          <CardFooter className="flex justify-between">
+            {!submitted ? (
+              <Button onClick={handleSubmit} disabled={userText.trim() === ""}>
+                Submit Answer
+              </Button>
+            ) : (
+              <Button onClick={resetExercise} variant="outline">
+                Try Again
+              </Button>
+            )}
+            {submitted && <Button onClick={() => router.push("/dashboard/exercises")}>Next Exercise</Button>}
+          </CardFooter>
+        </Card>
+      </div>
+    </main>
   )
 }
