@@ -1,26 +1,54 @@
-import React from 'react'
-import Link from 'next/link'
-import { Button } from './ui/button'
-import Logo from './Logo'
+"use client"
+
+import React from "react"
+import Link from "next/link"
+import { Button } from "./ui/button"
+import Logo from "./Logo"
+import { useSupabase } from "@/components/supabase-provider"
 
 export default function Header() {
+    const { user, supabase } = useSupabase()
+
+    const handleLogout = async () => {
+        await supabase.auth.signOut()
+    }
+
     return (
         <header className="sticky top-0 z-40 border-b border-border bg-background/0 backdrop-blur-xl">
             <div className="container flex h-16 items-center justify-between">
                 <Link href="/" className="flex items-center gap-2">
-                    <Logo width={28} height={28} />
-                    <span className="text-base font-bold md:text-lg">EnglishByEar</span>
+                    <Logo width={50} height={50} classChild="hidden md:block" />
+                    <span className="text-base font-bold md:text-lg">
+                        EnglishByEar
+                    </span>
                 </Link>
+
                 <nav className="flex items-center gap-2 sm:gap-3">
                     <Link href="/podcast" className="hidden md:block">
                         <Button variant="ghost">Podcast</Button>
                     </Link>
-                    <Link href="/login">
-                        <Button variant="ghost">Login</Button>
-                    </Link>
-                    <Link href="/register">
-                        <Button>Sign up</Button>
-                    </Link>
+
+                    {user ? (
+                        <>
+                            <Link href="/dashboard">
+                                <Button variant="ghost">Dashboard</Button>
+                            </Link>
+
+                            <Button onClick={handleLogout}>
+                                Logout
+                            </Button>
+                        </>
+                    ) : (
+                        <>
+                            <Link href="/login">
+                                <Button variant="ghost">Login</Button>
+                            </Link>
+
+                            <Link href="/register">
+                                <Button>Sign up</Button>
+                            </Link>
+                        </>
+                    )}
                 </nav>
             </div>
         </header>
