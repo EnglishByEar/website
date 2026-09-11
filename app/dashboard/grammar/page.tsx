@@ -10,9 +10,9 @@ export const metadata = {
 export default function GrammarPage() {
     return (
         <>
-            <main className="min-h-screen bg-background">
-                <div className="px-4 py-12 sm:py-16">
-                    <div className="mx-auto max-w-5xl">
+            <main className="min-h-screen bg-background ">
+                <div className="px-2 py-4 sm:py-16">
+                    <div className="mx-auto ">
                         <div className="mb-12">
                             <h1 className="text-4xl sm:text-5xl font-bold text-foreground mb-4">
                                 English Grammar Topics

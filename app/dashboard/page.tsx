@@ -248,7 +248,7 @@ export default function DashboardPage() {
   }
 
   return (
-    <div className="grid gap-6">
+    <div className="grid gap-6 px-2 py-4 sm:py-16">
       <div className="flex items-center text-center md:text-left justify-between flex-col md:flex-row gap-4">
         <div>
           <h1 className="text-3xl font-bold tracking-tight">

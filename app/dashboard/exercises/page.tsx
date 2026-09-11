@@ -159,10 +159,10 @@ export default function ExercisesPage() {
 
   return (
     <main className="min-h-screen bg-background">
-      <div className="grid gap-6">
+      <div className="grid gap-6 px-2 py-4 sm:py-16">
         <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
           <div>
-            <h1 className="text-3xl font-bold tracking-tight">Exercises</h1>
+            <h1 className="text-4xl sm:text-5xl font-bold text-foreground mb-4">Exercises</h1>
             <p className="text-muted-foreground">Choose an exercise to practice your listening skills</p>
           </div>
           <div className="relative w-full md:w-64">
