@@ -12,7 +12,7 @@ export default function HeroSection() {
                     Learn English by ear, one sentence at a time
                 </div>
 
-                <h1 className="animate-fade-up text-balance text-4xl font-bold tracking-tight md:text-6xl lg:text-7xl" style={{ animationDelay: '120ms' }}>
+                <h1 className="py-4 text-balance text-4xl font-bold tracking-tight md:text-6xl lg:text-7xl silver-text-shine">
                     Master English listening skills
                 </h1>
 

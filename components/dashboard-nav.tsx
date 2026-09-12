@@ -83,7 +83,7 @@ export default function DashboardNav() {
 
   return (
     <header className="top-0 z-40 my-4">
-      <div className="container flex items-center justify-between py-2">
+      <div className=" flex items-center justify-between py-2">
         <div className="flex items-center gap-2">
           <Link href="/dashboard" className="flex items-center gap-2">
             <Logo width={70} height={70} />
@@ -144,7 +144,7 @@ export default function DashboardNav() {
             </DropdownMenuContent>
           </DropdownMenu>
 
-          <Button variant="ghost" size="icon" className="md:hidden" onClick={() => setMobileMenuOpen(!mobileMenuOpen)}>
+          <Button variant="ghost" size="icon" className="md:hidden bg-primary/40" onClick={() => setMobileMenuOpen(!mobileMenuOpen)}>
             {mobileMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
           </Button>
         </div>
