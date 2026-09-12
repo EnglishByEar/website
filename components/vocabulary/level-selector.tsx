@@ -11,13 +11,13 @@ export function LevelSelector({ levels, groupCounts }: LevelSelectorProps) {
     return (
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
             {levels.map((level) => (
-                <Link key={level.level} href={`/vocabulary/${level.level}`}>
+                <Link key={level.level} href={`/dashboard/vocabulary/${level.level}`}>
                     <div className="group relative flex h-full flex-col overflow-hidden rounded-lg border border-border bg-card p-6 transition-all hover:shadow-md hover:border-primary">
                         <div
                             className="mb-4 flex h-11 w-11 items-center justify-center rounded-lg"
-                            style={{ backgroundColor: `var(--${level.color})`, opacity: 0.15 }}
+                            style={{ backgroundColor: `var(--${level.color})`, opacity: 0.8 }}
                         >
-                            <Layers className="h-5 w-5 text-primary" />
+                            <Layers className="h-5 w-5 text-white" />
                         </div>
                         <h3 className="font-semibold text-lg text-foreground group-hover:text-primary transition-colors">
                             {level.title}
