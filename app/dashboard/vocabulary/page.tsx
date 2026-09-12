@@ -1,8 +1,9 @@
+// import { Navbar } from '@/components/navbar'
 import { LevelSelector } from '@/components/vocabulary/level-selector'
 import { vocabularyLevels, getGroupsForLevel } from '@/data/vocabulary'
 
 export const metadata = {
-    title: 'Vocabulary - Grammar Hub',
+    title: 'Vocabulary - EnglishByEar',
     description: 'Build your English vocabulary with flashcards and quizzes across elementary, intermediate, and advanced levels.',
 }
 
@@ -14,8 +15,8 @@ export default function VocabularyPage() {
     return (
         <>
             <main className="min-h-screen bg-background">
-                <div className="px-4 py-12 sm:py-16">
-                    <div className="mx-auto max-w-5xl">
+                <div className="px-2 py-4 sm:py-16">
+                    <div className="mx-auto ">
                         <div className="mb-12">
                             <h1 className="text-4xl sm:text-5xl font-bold text-foreground mb-4">Vocabulary</h1>
                             <p className="text-lg text-foreground/70">
@@ -27,10 +28,6 @@ export default function VocabularyPage() {
                         <LevelSelector levels={vocabularyLevels} groupCounts={groupCounts} />
                     </div>
                 </div>
-
-                <footer className="border-t border-border px-4 py-8 text-center text-sm text-foreground/60">
-                    <p>&copy; 2024 Grammar Hub. Learning English, one word at a time.</p>
-                </footer>
             </main>
         </>
     )
