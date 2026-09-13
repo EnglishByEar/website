@@ -13,6 +13,7 @@ import GrammarSection from "@/components/grammar-section"
 import Header from "@/components/header"
 import Reveal from "@/components/reveal"
 import Footer from "@/components/footer"
+import VocabularySection from "@/components/vocabulary/vocabulary-section"
 
 const difficultyLevels = [
   {
@@ -101,6 +102,9 @@ export default function Home() {
             </div>
           </div>
         </section>
+
+        <VocabularySection />
+
 
         {/* Closing CTA */}
         <section className="container py-20 md:py-28">
