@@ -18,7 +18,7 @@ export default function GrammarSection() {
                     </p>
                 </div>
                 <Link
-                    href="/grammar"
+                    href="dashboard/grammar"
                     className="group inline-flex items-center gap-1.5 text-sm font-medium text-primary transition-opacity hover:opacity-80"
                 >
                     View all topics

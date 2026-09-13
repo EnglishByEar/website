@@ -57,16 +57,16 @@ export default async function LessonPage({ params }: LessonPageProps) {
             <main className="min-h-screen bg-background">
                 <div className="px-4 py-12 sm:py-16">
                     <div className="mx-auto max-w-4xl">
-                        <Link href="/grammar/sentence-structure" className="mb-8 inline-flex items-center text-sm font-medium text-primary hover:opacity-80">
+                        <Link href="dashboard/grammar/sentence-structure" className="mb-8 inline-flex items-center text-sm font-medium text-primary hover:opacity-80">
                             <ArrowLeft className="mr-2 h-4 w-4" /> Back to tenses
                         </Link>
                         <div className="mb-8 flex items-center gap-2 text-sm text-foreground/60">
-                            <Link href="/grammar" className="hover:text-foreground transition-colors">
+                            <Link href="dashboard/grammar" className="hover:text-foreground transition-colors">
                                 Grammar
                             </Link>
                             <span>/</span>
                             <Link
-                                href={`/grammar/${category.slug}`}
+                                href={`dashboard/grammar/${category.slug}`}
                                 className="hover:text-foreground transition-colors"
                             >
                                 {category.title}
@@ -132,7 +132,7 @@ export default async function LessonPage({ params }: LessonPageProps) {
                         <div className="mt-16 border-t border-border pt-8">
                             <div className="grid grid-cols-2 gap-4">
                                 {previousLesson ? (
-                                    <Link href={`/grammar/tenses/${previousLesson.id}`}>
+                                    <Link href={`dashboard/grammar/tenses/${previousLesson.id}`}>
                                         <button className="w-full flex items-center gap-2 rounded-lg border border-border bg-card p-4 text-left hover:border-primary hover:text-primary transition-colors">
                                             <ArrowLeft className="h-5 w-5" />
                                             <div className="min-w-0 flex-1">
@@ -146,7 +146,7 @@ export default async function LessonPage({ params }: LessonPageProps) {
                                 )}
 
                                 {nextLesson ? (
-                                    <Link href={`/grammar/tenses/${nextLesson.id}`}>
+                                    <Link href={`dashboard/grammar/tenses/${nextLesson.id}`}>
                                         <button className="w-full flex items-center justify-end gap-2 rounded-lg border border-border bg-card p-4 text-right hover:border-primary hover:text-primary transition-colors">
                                             <div className="min-w-0 flex-1">
                                                 <div className="text-xs text-foreground/60 mb-1">Next</div>
