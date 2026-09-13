@@ -189,3 +189,18 @@
     transform: none !important;
   }
 }
+
+@keyframes slide-text {
+  0% {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-slide-text {
+  animation: slide-text 0.4s ease-out;
+}

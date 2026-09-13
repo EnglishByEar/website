@@ -1,15 +1,37 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import Link from 'next/link'
 import { Button } from './ui/button'
 import { ArrowRight, Play } from 'lucide-react'
 
+
+const messages = [
+    "Learn English by ear, one sentence at a time",
+    "Practice real conversations, not just grammar rules",
+    "Build fluency with everyday listening",
+];
+
+
 export default function HeroSection() {
+    const [index, setIndex] = useState(0);
+
+    useEffect(() => {
+        const interval = setInterval(() => {
+            setIndex((prev) => (prev + 1) % messages.length);
+        }, 5000);
+        return () => clearInterval(interval);
+    }, []);
+
     return (
         <section className="container relative flex min-h-[calc(100vh-6rem)] flex-col items-center justify-center py-20 text-center">
             <div className="mx-auto flex max-w-3xl flex-col items-center gap-8">
-                <div className="animate-fade-up inline-flex items-center gap-2 rounded-full border border-border bg-card px-4 py-1.5 text-sm text-muted-foreground" style={{ animationDelay: '0ms' }}>
-                    <span className="animate-pulse-ring h-2 w-2 rounded-full bg-primary" />
-                    Learn English by ear, one sentence at a time
+                <div
+                    className="animate-fade-up inline-flex items-center gap-2 rounded-full border border-border bg-card px-4 py-1.5 text-sm text-muted-foreground overflow-hidden"
+                    style={{ animationDelay: "1ms" }}
+                >
+                    <span className="animate-pulse-ring h-2 w-2 rounded-full bg-primary shrink-0" />
+                    <span key={index} className="animate-slide-text inline-block">
+                        {messages[index]}
+                    </span>
                 </div>
 
                 <h1 className="py-4 text-balance text-4xl font-bold tracking-tight md:text-6xl lg:text-7xl silver-text-shine">
