@@ -8,7 +8,7 @@ interface LessonCardProps {
 }
 
 export function LessonCard({ lesson, categorySlug }: LessonCardProps) {
-    const href = `dashboard/grammar/${categorySlug}/${lesson.id}`
+    const href = `${categorySlug}/${lesson.id}`
 
     return (
         <Link href={href}>
