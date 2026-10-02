@@ -23,7 +23,7 @@ export function GroupPicker({ level, groups }: GroupPickerProps) {
                 const isCompleted = progress?.completed ?? false
 
                 return (
-                    <Link key={group.groupNumber} href={`/vocabulary/${level}/${group.groupNumber}`}>
+                    <Link key={group.groupNumber} href={`${level}/${group.groupNumber}`}>
                         <div className="group flex items-center gap-4 rounded-lg border border-border bg-card p-5 transition-all hover:shadow-md hover:border-primary">
                             <div className="flex h-11 w-11 flex-shrink-0 items-center justify-center rounded-lg bg-primary/10">
                                 {isCompleted ? (

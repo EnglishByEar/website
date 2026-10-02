@@ -48,7 +48,7 @@ export default async function VocabularyGroupPage({ params }: VocabularyGroupPag
                 <div className="px-4 py-8 sm:py-12">
                     <div className="mx-auto max-w-4xl">
                         <Link
-                            href={`/dashboard/vocabulary/${level}`}
+                            href={`${level}`}
                             className="inline-flex items-center gap-1.5 text-sm text-foreground/60 hover:text-foreground transition-colors"
                         >
                             <ArrowLeft className="h-4 w-4" />
