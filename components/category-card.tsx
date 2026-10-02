@@ -8,7 +8,7 @@ interface CategoryCardProps {
 
 export function CategoryCard({ category }: CategoryCardProps) {
     return (
-        <Link href={`dashboard/grammar/${category.slug}`}>
+        <Link href={`grammar/${category.slug}`}>
             <div className="group relative h-full overflow-hidden rounded-lg border border-border bg-card p-6 transition-all hover:shadow-lg hover:border-primary">
                 <div className="flex flex-col gap-3">
                     <div>
