@@ -10,9 +10,42 @@ import Footer from "@/components/footer"
 const inter = Inter({ subsets: ["latin"] })
 
 export const metadata: Metadata = {
-  title: "EnglishByEar - English Listening Practice",
-  description: "Practice your English listening skills with EnglishByEar"
+  title: 'EnglishByEar - English Listening Practice',
+  description:
+    'EnglishByEar is a platform for practicing English listening skills with native speakers.',
+  generator: 'realxein',
+  keywords: [
+    'english listening',
+    'english practice',
+    'english learning',
+    'english conversation',
+    'english speaking',
+  ],
+
+  openGraph: {
+    title: 'EnglishByEar - English Listening Practice',
+    description:
+      'EnglishByEar is a platform for practicing English listening skills with native speakers.',
+    type: 'website',
+    images: [
+      {
+        url: '/og-image.png',
+        width: 1200,
+        height: 630,
+        alt: 'EnglishByEar - English Listening Practice',
+      },
+    ],
+  },
+
+  twitter: {
+    card: 'summary_large_image',
+    title: 'EnglishByEar - English Listening Practice',
+    description:
+      'EnglishByEar is a platform for practicing English listening skills with native speakers.',
+    images: ['/og-image.png'],
+  },
 }
+
 
 export default function RootLayout({
   children,
