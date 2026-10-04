@@ -104,27 +104,44 @@ export default function ExercisePage({ params }: { params: Promise<{ id: string 
     fetchExercise()
   }, [supabase, id])
 
-  // Results calculation
+  const normalizeWords = (text: string): string[] =>
+  text
+    .toLowerCase()
+    .replace(/[’‘']/g, "")          
+    .replace(/[^\p{L}\p{N}\s]/gu, " ") 
+    .split(/\s+/)
+    .filter(Boolean) 
+  
+  
   const calculateResults = () => {
-    if (!exercise) return { accuracy: 0, mistakes: 0, totalWords: 0 }
+      if (!exercise) return { accuracy: 0, mistakes: 0, totalWords: 0 }
 
-    const originalWords = exercise.text.toLowerCase().split(/\s+/)
-    const userWords = userText.toLowerCase().split(/\s+/)
+      const original = normalizeWords(exercise.text)
+      const typed = normalizeWords(userText)
 
-    let correctWords = 0
-    const totalWords = originalWords.length
+      const m = original.length
+      const n = typed.length
 
-    for (let i = 0; i < Math.min(originalWords.length, userWords.length); i++) {
-      if (originalWords[i] === userWords[i]) {
-        correctWords++
+      let prev = Array.from({ length: n + 1 }, (_, j) => j)
+      for (let i = 1; i <= m; i++) {
+        const curr = [i]
+        for (let j = 1; j <= n; j++) {
+          const cost = original[i - 1] === typed[j - 1] ? 0 : 1
+          curr[j] = Math.min(
+            prev[j] + 1,        // missing word
+            curr[j - 1] + 1,    // extra word
+            prev[j - 1] + cost, // wrong word / match
+          )
+        }
+        prev = curr
       }
-    }
 
-    const accuracy = Math.round((correctWords / totalWords) * 100)
-    const mistakes = totalWords - correctWords
+      const mistakes = prev[n]
+      const totalWords = m
+      const accuracy = totalWords ? Math.max(0, Math.round((1 - mistakes / totalWords) * 100)) : 0
 
-    return { accuracy, mistakes, totalWords }
-  }
+      return { accuracy, mistakes, totalWords }
+}
 
   // Save to local storage with proper user separation
   const saveToLocalStorage = (results: any) => {
