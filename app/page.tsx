@@ -65,7 +65,6 @@ export default function Home() {
         <FeatureSection />
         <GrammarSection />
 
-        {/* Difficulty levels */}
         <section className="container border-t border-border py-20 md:py-28">
           <div className="grid gap-12 lg:grid-cols-2 lg:gap-16">
             <Reveal className="flex flex-col justify-center gap-4">
@@ -106,7 +105,6 @@ export default function Home() {
         <VocabularySection />
 
 
-        {/* Closing CTA */}
         <section className="container py-20 md:py-28">
           <Reveal className="flex flex-col items-center gap-6 rounded-2xl border border-border bg-card px-6 py-16 text-center transition-colors duration-300 hover:border-primary/40">
             <h2 className="text-balance text-3xl font-bold tracking-tight md:text-4xl">
