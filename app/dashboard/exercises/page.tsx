@@ -229,9 +229,9 @@ export default function ExercisesPage() {
                           </div>
                           <div className="flex-1 space-y-1">
                             <h3 className="font-medium">{exercise.title}</h3>
-                            <p className="text-sm text-muted-foreground">
-                              {exercise.description || exercise.text.substring(0, 100) + "..."}
-                            </p>
+                            {/* <p className="text-sm text-muted-foreground">
+                              {exercise.description}
+                            </p> */}
                             <div className="flex items-center gap-2 text-sm text-muted-foreground">
                               <Badge variant="outline">{exercise.category}</Badge>
                               <span>{exercise.duration}</span>
