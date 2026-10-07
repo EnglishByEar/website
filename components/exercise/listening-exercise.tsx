@@ -103,7 +103,7 @@ export function ListeningExercise({ exercise, onNext, nextLabel = "Next Exercise
           )}
         </div>
 
-        {score && <ResultsPanel score={score} userText={userText} />}
+        {score && <ResultsPanel score={score} />}
       </CardContent>
 
       <CardFooter className="flex justify-between">

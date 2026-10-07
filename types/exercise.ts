@@ -8,10 +8,25 @@ export interface Exercise {
   audio_url?: string | null
 }
 
+/**
+ * correct: typed word matches
+ * wrong:   typed a different word (typed + expected)
+ * missing: word was in the audio but not typed (expected)
+ * extra:   word was typed but not in the audio (typed)
+ */
+export type DiffType = "correct" | "wrong" | "missing" | "extra"
+
+export interface DiffToken {
+  type: DiffType
+  typed?: string
+  expected?: string
+}
+
 export interface ExerciseScore {
   accuracy: number
   mistakes: number
   totalWords: number
+  diff: DiffToken[]
 }
 
 export interface StoredExerciseResult {
