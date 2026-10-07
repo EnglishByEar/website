@@ -31,7 +31,6 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
       <div className="container p-2 mx-auto">
         <DashboardNav />
         <div className="py-8 bg-background rounded-3xl mb-8">{children}</div>
-        <Footer />
       </div>
     </div>
   )
