@@ -158,7 +158,7 @@ export default function ExercisesPage() {
   }
 
   return (
-    <main className="min-h-screen bg-background">
+    <main className="bg-background">
       <div className="grid gap-6 px-2 py-4 sm:py-16">
         <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
           <div>

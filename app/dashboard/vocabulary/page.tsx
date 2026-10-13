@@ -1,4 +1,3 @@
-// import { Navbar } from '@/components/navbar'
 import { LevelSelector } from '@/components/vocabulary/level-selector'
 import { vocabularyLevels, getGroupsForLevel } from '@/data/vocabulary'
 
@@ -14,7 +13,7 @@ export default function VocabularyPage() {
 
     return (
         <>
-            <main className="min-h-screen bg-background">
+            <main className=" bg-background">
                 <div className="px-2 py-4 sm:py-16">
                     <div className="mx-auto ">
                         <div className="mb-12">
