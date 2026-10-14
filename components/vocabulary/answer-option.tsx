@@ -33,8 +33,8 @@ export function AnswerOption({
                 'flex w-full items-center justify-between gap-3 rounded-lg border px-4 py-3 text-left text-sm font-medium transition-all',
                 'border-border bg-card text-foreground hover:border-primary/50',
                 isSelected && !isRevealed && 'border-primary bg-primary/5',
-                showCorrect && 'border-primary bg-primary/10 text-foreground',
-                showIncorrect && 'border-destructive bg-destructive/10 text-foreground',
+                showCorrect && 'border-green-500 bg-green-700 text-foreground',
+                showIncorrect && 'border-red-500 bg-red-700 text-foreground',
                 disabled && !isSelected && !showCorrect && 'opacity-60'
             )}
         >
