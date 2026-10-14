@@ -63,7 +63,6 @@ export default function SettingsPage() {
           avatar_url: data.avatar_url || "man",
         })
 
-        // In a real app, you would fetch preferences from the database
         setPreferences({
           darkMode: true,
           notifications: true,
@@ -167,7 +166,6 @@ export default function SettingsPage() {
       <Tabs defaultValue="profile" className="space-y-4">
         <TabsList>
           <TabsTrigger value="profile">Profile</TabsTrigger>
-          <TabsTrigger value="preferences">Preferences</TabsTrigger>
           <TabsTrigger value="account">Account</TabsTrigger>
         </TabsList>
         <TabsContent value="profile" className="space-y-4">
@@ -315,100 +313,7 @@ export default function SettingsPage() {
             </form>
           </Card>
         </TabsContent>
-        <TabsContent value="preferences" className="space-y-4">
-          <Card>
-            <CardHeader>
-              <CardTitle>Preferences</CardTitle>
-              <CardDescription>Customize your experience on EnglishByEar</CardDescription>
-            </CardHeader>
-            <CardContent className="space-y-6">
-              <div className="space-y-4">
-                <h3 className="text-lg font-medium">Appearance</h3>
-                <div className="flex items-center justify-between">
-                  <div className="space-y-0.5">
-                    <Label htmlFor="darkMode">Dark Mode</Label>
-                    <p className="text-sm text-muted-foreground">
-                      Enable dark mode for a more comfortable viewing experience
-                    </p>
-                  </div>
-                  <Switch
-                    id="darkMode"
-                    checked={preferences.darkMode}
-                    onCheckedChange={(checked) => setPreferences({ ...preferences, darkMode: checked })}
-                  />
-                </div>
-              </div>
-
-              <Separator />
-
-              <div className="space-y-4">
-                <h3 className="text-lg font-medium">Notifications</h3>
-                <div className="flex items-center justify-between">
-                  <div className="space-y-0.5">
-                    <Label htmlFor="notifications">Enable Notifications</Label>
-                    <p className="text-sm text-muted-foreground">
-                      Receive notifications for new challenges and achievements
-                    </p>
-                  </div>
-                  <Switch
-                    id="notifications"
-                    checked={preferences.notifications}
-                    onCheckedChange={(checked) => setPreferences({ ...preferences, notifications: checked })}
-                  />
-                </div>
-              </div>
-
-              <Separator />
-
-              <div className="space-y-4">
-                <h3 className="text-lg font-medium">Exercise Settings</h3>
-                <div className="flex items-center justify-between">
-                  <div className="space-y-0.5">
-                    <Label htmlFor="soundEffects">Sound Effects</Label>
-                    <p className="text-sm text-muted-foreground">Play sounds for correct and incorrect answers</p>
-                  </div>
-                  <Switch
-                    id="soundEffects"
-                    checked={preferences.soundEffects}
-                    onCheckedChange={(checked) => setPreferences({ ...preferences, soundEffects: checked })}
-                  />
-                </div>
-                <div className="flex items-center justify-between">
-                  <div className="space-y-0.5">
-                    <Label htmlFor="autoPlayAudio">Auto-Play Audio</Label>
-                    <p className="text-sm text-muted-foreground">Automatically play audio when starting an exercise</p>
-                  </div>
-                  <Switch
-                    id="autoPlayAudio"
-                    checked={preferences.autoPlayAudio}
-                    onCheckedChange={(checked) => setPreferences({ ...preferences, autoPlayAudio: checked })}
-                  />
-                </div>
-                <div className="grid gap-2">
-                  <Label htmlFor="defaultDifficulty">Default Difficulty</Label>
-                  <Select
-                    value={preferences.defaultDifficulty}
-                    onValueChange={(value) => setPreferences({ ...preferences, defaultDifficulty: value })}
-                  >
-                    <SelectTrigger id="defaultDifficulty">
-                      <SelectValue placeholder="Select difficulty" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="simple">Simple</SelectItem>
-                      <SelectItem value="medium">Medium</SelectItem>
-                      <SelectItem value="advanced">Advanced</SelectItem>
-                    </SelectContent>
-                  </Select>
-                </div>
-              </div>
-            </CardContent>
-            <CardFooter>
-              <Button onClick={handlePreferencesUpdate} disabled={loading}>
-                {loading ? "Saving..." : "Save Preferences"}
-              </Button>
-            </CardFooter>
-          </Card>
-        </TabsContent>
+      
         <TabsContent value="account" className="space-y-4">
           <Card>
             <CardHeader>
