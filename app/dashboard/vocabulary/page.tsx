@@ -13,11 +13,11 @@ export default function VocabularyPage() {
 
     return (
         <>
-            <main className=" bg-background">
-                <div className="px-2 py-4 sm:py-16">
+            <main className="bg-background">
+                <div className="px-2 py-4 sm:py-4">
                     <div className="mx-auto ">
                         <div className="mb-12">
-                            <h1 className="text-4xl sm:text-5xl font-bold text-foreground mb-4">Vocabulary</h1>
+                            <h1 className="text-3xl font-bold tracking-tight">Vocabulary</h1>
                             <p className="text-lg text-foreground/70">
                                 Learn new words with flashcards, then test yourself with quizzes. Choose a level to
                                 get started.

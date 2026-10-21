@@ -11,7 +11,7 @@ const TABS: SettingsTab[] = [
 
 export default function SettingsPage() {
   return (
-    <div className="grid gap-6 px-2 py-4 sm:py-16">
+    <div className="grid gap-6 px-2 py-4 sm:py-4">
       <h1 className="text-3xl font-bold tracking-tight">Settings</h1>
       <SettingsTabs tabs={TABS} />
     </div>

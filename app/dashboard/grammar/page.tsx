@@ -11,10 +11,10 @@ export default function GrammarPage() {
     return (
         <>
             <main className="bg-background ">
-                <div className="px-2 py-4 sm:py-16">
+                <div className="px-2 py-4 sm:py-4">
                     <div className="mx-auto ">
                         <div className="mb-12">
-                            <h1 className="text-4xl sm:text-5xl font-bold text-foreground mb-4">
+                            <h1 className="text-3xl font-bold tracking-tight">
                                 English Grammar Topics
                             </h1>
                             <p className="text-lg text-foreground/70">
