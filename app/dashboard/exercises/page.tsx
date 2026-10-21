@@ -200,7 +200,7 @@ export default function ExercisesPage() {
                     <span>5-6 min</span>
                   </div>
                 </div>
-                <Link href="/dashboard/exercises/daily" className="sm:self-end">
+                <Link href="/dashboard/exercises" className="sm:self-end">
                   <Button>Start Challenge</Button>
                 </Link>
               </div>
