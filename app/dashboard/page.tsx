@@ -4,25 +4,77 @@ import { useEffect, useState } from "react"
 import Link from "next/link"
 import { useSupabase } from "@/components/supabase-provider"
 import { Button } from "@/components/ui/button"
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
+import { Card, CardContent } from "@/components/ui/card"
 import { Progress } from "@/components/ui/progress"
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Badge } from "@/components/ui/badge"
-import { Play, Award, Clock, BarChart2, Trophy, Headphones } from "lucide-react"
+import { Play, Flame, Target, Headphones, Check, Lock, ChevronRight, Zap, RotateCcw } from "lucide-react"
+
+const DAY_MS = 24 * 60 * 60 * 1000
+const startOfDay = (d: Date) => {
+  const x = new Date(d)
+  x.setHours(0, 0, 0, 0)
+  return x
+}
+
+const getTimeAgo = (date: Date) => {
+  const days = Math.floor((Date.now() - date.getTime()) / DAY_MS)
+  if (days <= 0) return "Today"
+  if (days === 1) return "Yesterday"
+  if (days < 7) return `${days} days ago`
+  if (days < 30) return `${Math.floor(days / 7)} weeks ago`
+  return `${Math.floor(days / 30)} months ago`
+}
+
+const getGreeting = () => {
+  const h = new Date().getHours()
+  if (h < 12) return "Good morning"
+  if (h < 18) return "Good afternoon"
+  return "Good evening"
+}
+
+// Circular level progress (the one "hero" visual on the page)
+function LevelRing({ level, progress }: { level: number; progress: number }) {
+  const r = 52
+  const c = 2 * Math.PI * r
+  const [shown, setShown] = useState(0)
+  useEffect(() => {
+    const t = setTimeout(() => setShown(progress), 150)
+    return () => clearTimeout(t)
+  }, [progress])
+
+  return (
+    <div className="relative h-36 w-36 shrink-0">
+      <svg viewBox="0 0 120 120" className="h-full w-full -rotate-90">
+        <circle cx="60" cy="60" r={r} fill="none" strokeWidth="10" className="stroke-primary-foreground/20" />
+        <circle
+          cx="60"
+          cy="60"
+          r={r}
+          fill="none"
+          strokeWidth="10"
+          strokeLinecap="round"
+          className="stroke-primary-foreground transition-[stroke-dashoffset] duration-1000 ease-out motion-reduce:transition-none"
+          strokeDasharray={c}
+          strokeDashoffset={c * (1 - shown)}
+        />
+      </svg>
+      <div className="absolute inset-0 flex flex-col items-center justify-center text-primary-foreground">
+        <span className="text-xs text-primary-foreground/70">Level</span>
+        <span className="text-4xl font-extrabold leading-none">{level}</span>
+      </div>
+    </div>
+  )
+}
 
 export default function DashboardPage() {
   const { supabase, user } = useSupabase()
   const [profile, setProfile] = useState<any>(null)
-  const [stats, setStats] = useState({
-    exercisesCompleted: 0,
-    averageAccuracy: 0,
-    streak: 0,
-    level: 1,
-  })
+  const [stats, setStats] = useState({ exercisesCompleted: 0, averageAccuracy: 0, streak: 0, level: 1 })
   const [recentExercises, setRecentExercises] = useState<any[]>([])
+  const [hasPerfectScore, setHasPerfectScore] = useState(false)
+  const [activeDays, setActiveDays] = useState<number[]>([])
   const [loading, setLoading] = useState(true)
 
-  // Function to load results from localStorage
   const loadFromLocalStorage = () => {
     try {
       const stored = localStorage.getItem("englishbyear_results")
@@ -33,7 +85,6 @@ export default function DashboardPage() {
     }
   }
 
-  // Function to refresh dashboard data
   const refreshDashboardData = async () => {
     if (!user) {
       setLoading(false)
@@ -41,23 +92,18 @@ export default function DashboardPage() {
     }
 
     try {
-      // Try to fetch profile
       let profileData = null
       if (supabase) {
         try {
           const { data, error } = await supabase.from("profiles").select("*").eq("id", user.id).single()
-          if (error && !(error.code === "42P01" || error.message?.includes("does not exist"))) {
-            throw error
-          }
+          if (error && !(error.code === "42P01" || error.message?.includes("does not exist"))) throw error
           profileData = data
         } catch (error) {
           console.warn("Profile table not found, using fallback data")
         }
       }
-
       setProfile(profileData)
 
-      // Try to fetch exercise results from database
       let exerciseResults: any[] = []
       if (supabase) {
         try {
@@ -69,9 +115,7 @@ export default function DashboardPage() {
             .limit(50)
 
           if (resultsError) {
-            if (!(resultsError.code === "42P01" || resultsError.message?.includes("does not exist"))) {
-              throw resultsError
-            }
+            if (!(resultsError.code === "42P01" || resultsError.message?.includes("does not exist"))) throw resultsError
           } else {
             exerciseResults = results || []
           }
@@ -80,75 +124,41 @@ export default function DashboardPage() {
         }
       }
 
-      // If no database results, load from localStorage
       if (exerciseResults.length === 0) {
         const localResults = loadFromLocalStorage()
         exerciseResults = localResults.filter((r: any) => r.user_id === user.id || r.user_id === "anonymous")
       }
 
-      // Process recent exercises
-      const processedExercises = exerciseResults.slice(0, 3).map((result) => ({
-        id: result.exercise_id,
-        title: result.exercise_title || `Exercise #${result.exercise_id}`,
-        difficulty: result.exercise_difficulty || "Unknown",
-        category: result.exercise_category || "Unknown",
-        accuracy: result.accuracy,
-        date: new Date(result.completed_at).toLocaleDateString(),
-        timeAgo: getTimeAgo(new Date(result.completed_at)),
-      }))
+      setRecentExercises(
+        exerciseResults.slice(0, 3).map((result) => ({
+          id: result.exercise_id,
+          title: result.exercise_title || `Exercise #${result.exercise_id}`,
+          difficulty: result.exercise_difficulty || "Unknown",
+          accuracy: result.accuracy,
+          timeAgo: getTimeAgo(new Date(result.completed_at)),
+        })),
+      )
+      setHasPerfectScore(exerciseResults.some((r) => r.accuracy === 100))
 
-      setRecentExercises(processedExercises)
+      // Days with activity (used for streak + weekly row)
+      const daySet = new Set<number>(exerciseResults.map((r) => startOfDay(new Date(r.completed_at)).getTime()))
+      setActiveDays(Array.from(daySet))
 
-      // Calculate stats from real data
       if (exerciseResults.length > 0) {
-        const totalAccuracy = exerciseResults.reduce((sum, result) => sum + result.accuracy, 0)
-        const averageAccuracy = Math.round(totalAccuracy / exerciseResults.length)
+        const averageAccuracy = Math.round(
+          exerciseResults.reduce((sum, r) => sum + r.accuracy, 0) / exerciseResults.length,
+        )
 
-        // Calculate streak (simplified version)
-        const today = new Date()
-        today.setHours(0, 0, 0, 0)
-
+        // Streak: count consecutive days back from today (or yesterday if not practiced yet today)
+        const today = startOfDay(new Date())
+        const yesterday = new Date(today)
+        yesterday.setDate(yesterday.getDate() - 1)
+        let cursor: Date | null = daySet.has(today.getTime()) ? today : daySet.has(yesterday.getTime()) ? yesterday : null
         let streak = 0
-        const sortedDates = exerciseResults
-          .map((r) => {
-            const date = new Date(r.completed_at)
-            date.setHours(0, 0, 0, 0)
-            return date.getTime()
-          })
-          .filter((date, index, arr) => arr.indexOf(date) === index) // Remove duplicates
-          .sort((a, b) => b - a) // Sort descending
-
-        // Check if most recent exercise was today or yesterday
-        if (sortedDates.length > 0) {
-          const mostRecent = sortedDates[0]
-          const yesterday = new Date(today)
-          yesterday.setDate(yesterday.getDate() - 1)
-
-          if (mostRecent === today.getTime()) {
-            streak = 1
-            // Count consecutive days
-            for (let i = 1; i < sortedDates.length; i++) {
-              const expectedDate = new Date(today)
-              expectedDate.setDate(expectedDate.getDate() - i)
-              if (sortedDates[i] === expectedDate.getTime()) {
-                streak++
-              } else {
-                break
-              }
-            }
-          } else if (mostRecent === yesterday.getTime()) {
-            // Start counting from yesterday
-            streak = 1
-            for (let i = 1; i < sortedDates.length; i++) {
-              const expectedDate = new Date(yesterday)
-              expectedDate.setDate(expectedDate.getDate() - (i - 1))
-              if (sortedDates[i] === expectedDate.getTime()) {
-                streak++
-              } else {
-                break
-              }
-            }
-          }
+        while (cursor && daySet.has(cursor.getTime())) {
+          streak++
+          cursor = new Date(cursor)
+          cursor.setDate(cursor.getDate() - 1)
         }
 
         setStats({
@@ -158,14 +168,9 @@ export default function DashboardPage() {
           level: Math.floor(exerciseResults.length / 10) + 1,
         })
       } else {
-        // Reset stats if no data
-        setStats({
-          exercisesCompleted: 0,
-          averageAccuracy: 0,
-          streak: 0,
-          level: 1,
-        })
+        setStats({ exercisesCompleted: 0, averageAccuracy: 0, streak: 0, level: 1 })
         setRecentExercises([])
+        setActiveDays([])
       }
     } catch (error) {
       console.error("Error fetching dashboard data:", error)
@@ -176,295 +181,281 @@ export default function DashboardPage() {
 
   useEffect(() => {
     refreshDashboardData()
-
-    // Listen for exercise completion events
-    const handleExerciseCompleted = () => {
-      console.log("Exercise completed, refreshing dashboard...")
-      refreshDashboardData()
-    }
-
+    const handleExerciseCompleted = () => refreshDashboardData()
     window.addEventListener("exerciseCompleted", handleExerciseCompleted)
-
-    return () => {
-      window.removeEventListener("exerciseCompleted", handleExerciseCompleted)
-    }
+    return () => window.removeEventListener("exerciseCompleted", handleExerciseCompleted)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [supabase, user])
-
-  // Helper function to get time ago
-  const getTimeAgo = (date: Date) => {
-    const now = new Date()
-    const diffInMs = now.getTime() - date.getTime()
-    const diffInDays = Math.floor(diffInMs / (1000 * 60 * 60 * 24))
-
-    if (diffInDays === 0) return "Today"
-    if (diffInDays === 1) return "Yesterday"
-    if (diffInDays < 7) return `${diffInDays} days ago`
-    if (diffInDays < 30) return `${Math.floor(diffInDays / 7)} weeks ago`
-    return `${Math.floor(diffInDays / 30)} months ago`
-  }
 
   const dailyChallenge = {
     title: "Business Communication",
     difficulty: "Medium",
-    description: "Practice listening to a business meeting conversation",
+    description: "Listen to a business meeting and answer questions about the key decisions.",
     xp: 50,
   }
 
   const achievements = [
-    {
-      id: 1,
-      title: "First Steps",
-      description: "Complete your first exercise",
-      unlocked: stats.exercisesCompleted > 0,
-    },
-    {
-      id: 2,
-      title: "Perfect Score",
-      description: "Achieve 100% accuracy on any exercise",
-      unlocked: recentExercises.some((ex) => ex.accuracy === 100),
-    },
-    {
-      id: 3,
-      title: "Week Streak",
-      description: "Complete exercises for 7 days in a row",
-      unlocked: stats.streak >= 7,
-    },
-    {
-      id: 4,
-      title: "Dedicated Learner",
-      description: "Complete 10 exercises",
-      unlocked: stats.exercisesCompleted >= 10,
-    },
+    { id: 1, emoji: "👣", title: "First Steps", description: "Complete your first exercise", current: Math.min(stats.exercisesCompleted, 1), goal: 1 },
+    { id: 2, emoji: "🎯", title: "Perfect Score", description: "Get 100% on any exercise", current: hasPerfectScore ? 1 : 0, goal: 1 },
+    { id: 3, emoji: "🔥", title: "Week Streak", description: "Practice 7 days in a row", current: Math.min(stats.streak, 7), goal: 7 },
+    { id: 4, emoji: "📚", title: "Dedicated Learner", description: "Complete 10 exercises", current: Math.min(stats.exercisesCompleted, 10), goal: 10 },
     {
       id: 5,
+      emoji: "🏆",
       title: "Accuracy Master",
-      description: "Maintain 90%+ average accuracy",
-      unlocked: stats.averageAccuracy >= 90 && stats.exercisesCompleted >= 5,
+      description: "Reach 90% average over 5+ exercises",
+      current: stats.exercisesCompleted >= 5 && stats.averageAccuracy >= 90 ? 1 : 0,
+      goal: 1,
     },
-  ]
+  ].map((a) => ({ ...a, unlocked: a.current >= a.goal }))
+
+  // Last 7 days, oldest -> today
+  const week = Array.from({ length: 7 }, (_, i) => {
+    const d = startOfDay(new Date())
+    d.setDate(d.getDate() - (6 - i))
+    return {
+      label: d.toLocaleDateString("en-US", { weekday: "short" }),
+      done: activeDays.includes(d.getTime()),
+      isToday: i === 6,
+    }
+  })
+  const practicedToday = week[6].done
+  const toNext = 10 - (stats.exercisesCompleted % 10)
+  const levelProgress = (stats.exercisesCompleted % 10) / 10
+  const unlockedCount = achievements.filter((a) => a.unlocked).length
+
+  const motivation =
+    stats.exercisesCompleted === 0
+      ? "Your first listening exercise takes about 5 minutes. Let's start."
+      : practicedToday
+        ? "Nice work today. One more exercise keeps your ears sharp."
+        : stats.streak > 0
+          ? `Practice today to keep your ${stats.streak}-day streak alive.`
+          : "A short exercise today starts a new streak."
 
   if (loading) {
     return <div className="flex h-[calc(100vh-4rem)] items-center justify-center">Loading...</div>
   }
 
   return (
-    <div className="grid gap-6 px-2 py-4 sm:py-4">
-      <div className="flex items-center text-center md:text-left justify-between flex-col md:flex-row gap-4">
-        <div>
-          <h1 className="text-3xl font-bold tracking-tight">
-            Welcome back{profile?.username ? `, ${profile.username}` : ""}!
-          </h1>
-          <p className="text-muted-foreground">Here's your learning progress</p>
+    <div className="grid gap-6 py-4">
+      <section className="relative overflow-hidden rounded-3xl bg-primary p-6 text-primary-foreground sm:p-8">
+        <div className="flex flex-col items-center gap-6 text-center md:flex-row md:justify-between md:text-left">
+          <div className="max-w-xl space-y-4">
+            <div>
+              <h1 className="text-3xl font-bold tracking-tight sm:text-4xl">
+                {getGreeting()}
+                {profile?.username ? `, ${profile.username}` : ""}!
+              </h1>
+              <p className="mt-2 text-primary-foreground/80">{motivation}</p>
+            </div>
+            <div className="flex flex-wrap items-center justify-center gap-3 md:justify-start">
+              <Link href="/dashboard/exercises">
+                <Button size="lg" className="bg-accent font-semibold text-accent-foreground hover:bg-accent/90">
+                  <Play className="mr-2 h-4 w-4" />
+                  {stats.exercisesCompleted === 0 ? "Start your first exercise" : "Start new exercise"}
+                </Button>
+              </Link>
+              <span className="inline-flex items-center gap-1.5 rounded-full bg-primary-foreground/15 px-3 py-2 text-sm">
+                <Flame className="h-4 w-4" />
+                {stats.streak} day streak
+              </span>
+            </div>
+          </div>
+
+          <div className="flex flex-col items-center gap-2">
+            <LevelRing level={stats.level} progress={levelProgress} />
+            <p className="text-sm text-primary-foreground/80">
+              {toNext} {toNext === 1 ? "exercise" : "exercises"} to level {stats.level + 1}
+            </p>
+          </div>
         </div>
-        <Link href="/dashboard/exercises">
-          <Button>
-            <Play className="mr-2 h-4 w-4" /> Start New Exercise
-          </Button>
-        </Link>
+      </section>
+
+      {/* Weekly streak row + quick stats */}
+      <div className="grid gap-6 lg:grid-cols-3">
+        <Card className="lg:col-span-2">
+          <CardContent className="p-6">
+            <div className="mb-4 flex items-center justify-between">
+              <h2 className="text-lg font-semibold">This week</h2>
+              <span className="text-sm text-muted-foreground">{week.filter((d) => d.done).length} of 7 days practiced</span>
+            </div>
+            <div className="grid grid-cols-7 gap-2">
+              {week.map((d, i) => (
+                <div key={i} className="flex flex-col items-center gap-2">
+                  <div
+                    className={`flex h-11 w-11 items-center justify-center rounded-full border-2 transition-colors sm:h-12 sm:w-12 ${
+                      d.done
+                        ? "border-primary bg-primary text-primary-foreground"
+                        : d.isToday
+                          ? "border-dashed border-primary text-primary"
+                          : "border-muted bg-muted/40 text-muted-foreground"
+                    }`}
+                  >
+                    {d.done ? <Check className="h-5 w-5" /> : d.isToday ? <Headphones className="h-4 w-4" /> : null}
+                  </div>
+                  <span className={`text-xs ${d.isToday ? "font-semibold text-foreground" : "text-muted-foreground"}`}>
+                    {d.isToday ? "Today" : d.label}
+                  </span>
+                </div>
+              ))}
+            </div>
+          </CardContent>
+        </Card>
+
+        <div className="grid grid-cols-2 gap-4 lg:grid-cols-1">
+          <Card>
+            <CardContent className="flex items-center gap-4 p-5">
+              <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-secondary text-secondary-foreground">
+                <Headphones className="h-6 w-6" />
+              </div>
+              <div>
+                <div className="text-2xl font-bold">{stats.exercisesCompleted}</div>
+                <p className="text-sm text-muted-foreground">Exercises done</p>
+              </div>
+            </CardContent>
+          </Card>
+          <Card>
+            <CardContent className="flex items-center gap-4 p-5">
+              <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-primary/10 text-primary">
+                <Target className="h-6 w-6" />
+              </div>
+              <div className="flex-1">
+                <div className="text-2xl font-bold">{stats.exercisesCompleted > 0 ? `${stats.averageAccuracy}%` : "—"}</div>
+                <p className="text-sm text-muted-foreground">Average accuracy</p>
+                {stats.exercisesCompleted > 0 && <Progress value={stats.averageAccuracy} className="mt-2 h-1.5" />}
+              </div>
+            </CardContent>
+          </Card>
+        </div>
       </div>
 
-      <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Exercises Completed</CardTitle>
-            <Headphones className="h-4 w-4 text-muted-foreground" />
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">{stats.exercisesCompleted}</div>
-            <p className="text-xs text-muted-foreground">
-              {stats.exercisesCompleted === 0 ? "Start your first exercise!" : `Level ${stats.level} learner`}
-            </p>
+      {/* Daily challenge + recent exercises */}
+      <div className="grid gap-6 lg:grid-cols-5">
+        <Card className="overflow-hidden border-accent bg-accent/40 lg:col-span-2">
+          <CardContent className="flex h-full flex-col gap-4 p-6">
+            <div className="flex items-center justify-between">
+              <h2 className="text-lg font-semibold">Today's challenge</h2>
+              <span className="inline-flex items-center gap-1 rounded-full bg-accent px-2.5 py-1 text-sm font-semibold text-accent-foreground">
+                <Zap className="h-3.5 w-3.5" />+{dailyChallenge.xp} XP
+              </span>
+            </div>
+            <div className="space-y-2">
+              <p className="text-xl font-bold">{dailyChallenge.title}</p>
+              <Badge variant="secondary">{dailyChallenge.difficulty}</Badge>
+              <p className="text-sm text-muted-foreground">{dailyChallenge.description}</p>
+            </div>
+            <Link href="/dashboard/exercises" className="mt-auto">
+              <Button className="w-full">Start challenge</Button>
+            </Link>
           </CardContent>
         </Card>
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Average Accuracy</CardTitle>
-            <BarChart2 className="h-4 w-4 text-muted-foreground" />
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">{stats.exercisesCompleted > 0 ? `${stats.averageAccuracy}%` : "—"}</div>
-            {stats.exercisesCompleted > 0 && <Progress value={stats.averageAccuracy} className="mt-2" />}
-            <p className="text-xs text-muted-foreground mt-1">
-              {stats.exercisesCompleted === 0 ? "Complete exercises to see accuracy" : "Keep practicing!"}
-            </p>
-          </CardContent>
-        </Card>
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Current Streak</CardTitle>
-            <Award className="h-4 w-4 text-muted-foreground" />
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">{stats.streak} days</div>
-            <p className="text-xs text-muted-foreground">
-              {stats.streak === 0 ? "Start practicing daily!" : "Keep it up!"}
-            </p>
-          </CardContent>
-        </Card>
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Current Level</CardTitle>
-            <Trophy className="h-4 w-4 text-muted-foreground" />
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">Level {stats.level}</div>
-            <Progress value={(stats.exercisesCompleted % 10) * 10} className="mt-2" />
-            <p className="text-xs text-muted-foreground mt-1">
-              {10 - (stats.exercisesCompleted % 10)} more to level {stats.level + 1}
-            </p>
-          </CardContent>
-        </Card>
-      </div>
 
-      <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-        <Card className="md:col-span-2">
-          <CardHeader>
-            <CardTitle>Recent Exercises</CardTitle>
-            <CardDescription>
-              {recentExercises.length > 0 ? "Your last completed exercises" : "No exercises completed yet"}
-            </CardDescription>
-          </CardHeader>
-          <CardContent>
+        <Card className="lg:col-span-3">
+          <CardContent className="p-6">
+            <div className="mb-4 flex items-center justify-between">
+              <h2 className="text-lg font-semibold">Pick up where you left off</h2>
+              {recentExercises.length > 0 && (
+                <Link href="/dashboard/progress" className="flex items-center text-sm text-primary hover:underline">
+                  View history <ChevronRight className="h-4 w-4" />
+                </Link>
+              )}
+            </div>
+
             {recentExercises.length === 0 ? (
-              <div className="flex flex-col items-center justify-center py-8 text-center">
-                <Headphones className="h-12 w-12 text-muted-foreground mb-4" />
-                <h3 className="text-lg font-medium mb-2">No exercises yet</h3>
-                <p className="text-muted-foreground mb-4">
-                  Start your first listening exercise to see your progress here
-                </p>
+              <div className="flex flex-col items-center py-8 text-center">
+                <div className="mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-primary/10 text-primary">
+                  <Headphones className="h-8 w-8" />
+                </div>
+                <h3 className="mb-1 text-lg font-medium">Your listening journey starts here</h3>
+                <p className="mb-4 text-sm text-muted-foreground">Finish an exercise and your results will show up here.</p>
                 <Link href="/dashboard/exercises">
-                  <Button>Browse Exercises</Button>
+                  <Button>Browse exercises</Button>
                 </Link>
               </div>
             ) : (
-              <div className="space-y-4">
-                {recentExercises.map((exercise, index) => (
-                  <div key={`${exercise.id}-${index}`} className="flex items-center justify-between">
-                    <div className="space-y-1">
-                      <p className="text-sm font-medium leading-none">{exercise.title}</p>
-                      <div className="flex items-center gap-2">
-                        <Badge
-                          variant={
-                            exercise.difficulty === "Simple"
-                              ? "outline"
-                              : exercise.difficulty === "Medium"
-                                ? "secondary"
-                                : "destructive"
-                          }
-                          className="text-xs"
-                        >
-                          {exercise.difficulty}
-                        </Badge>
-                        <p className="text-xs text-muted-foreground">{exercise.timeAgo}</p>
-                      </div>
-                    </div>
-                    <div className="flex items-center gap-2">
-                      <div
-                        className={`text-sm font-medium ${exercise.accuracy >= 90
-                          ? "text-green-500"
-                          : exercise.accuracy >= 70
-                            ? "text-yellow-500"
-                            : "text-red-500"
-                          }`}
-                      >
+              <div className="space-y-3">
+                {recentExercises.map((exercise, index) => {
+                  const tone =
+                    exercise.accuracy >= 90
+                      ? "bg-secondary text-secondary-foreground"
+                      : exercise.accuracy >= 70
+                        ? "bg-accent text-accent-foreground"
+                        : "bg-destructive/15 text-destructive"
+                  return (
+                    <div
+                      key={`${exercise.id}-${index}`}
+                      className="flex items-center justify-between gap-3 rounded-2xl border p-3 transition-colors hover:bg-muted/50"
+                    >
+                      <div className={`flex h-12 w-12 shrink-0 items-center justify-center rounded-xl text-sm font-bold ${tone}`}>
                         {exercise.accuracy}%
                       </div>
+                      <div className="min-w-0 flex-1">
+                        <p className="truncate text-sm font-medium">{exercise.title}</p>
+                        <div className="mt-1 flex items-center gap-2">
+                          <Badge
+                            variant={exercise.difficulty === "Simple" ? "outline" : exercise.difficulty === "Medium" ? "secondary" : "destructive"}
+                            className="text-xs"
+                          >
+                            {exercise.difficulty}
+                          </Badge>
+                          <span className="text-xs text-muted-foreground">{exercise.timeAgo}</span>
+                        </div>
+                      </div>
                       <Link href={`/dashboard/exercises/${exercise.id}`}>
-                        <Button variant="ghost" size="sm">
-                          Retry
+                        <Button variant="outline" size="sm">
+                          <RotateCcw className="mr-1.5 h-3.5 w-3.5" />
+                          {exercise.accuracy < 90 ? "Improve" : "Retry"}
                         </Button>
                       </Link>
                     </div>
-                  </div>
-                ))}
+                  )
+                })}
               </div>
             )}
           </CardContent>
-          {recentExercises.length > 0 && (
-            <CardFooter>
-              <Link href="/dashboard/progress">
-                <Button variant="outline">View All History</Button>
-              </Link>
-            </CardFooter>
-          )}
-        </Card>
-
-        <Card>
-          <CardHeader>
-            <CardTitle>Daily Challenge</CardTitle>
-            <CardDescription>Complete for bonus XP</CardDescription>
-          </CardHeader>
-          <CardContent>
-            <div className="space-y-4">
-              <div className="flex items-center gap-2">
-                <Clock className="h-5 w-5 text-primary" />
-                <div className="text-sm font-medium">{dailyChallenge.title}</div>
-              </div>
-              <Badge variant="secondary">{dailyChallenge.difficulty}</Badge>
-              <p className="text-sm text-muted-foreground">{dailyChallenge.description}</p>
-              <div className="flex items-center gap-2">
-                <Trophy className="h-4 w-4 text-yellow-500" />
-                <span className="text-sm">{dailyChallenge.xp} XP</span>
-              </div>
-            </div>
-          </CardContent>
-          <CardFooter>
-            <Link href="/dashboard/exercises/daily">
-              <Button className="w-full">Start Challenge</Button>
-            </Link>
-          </CardFooter>
         </Card>
       </div>
 
+      {/* Achievements */}
       <Card>
-        <CardHeader>
-          <CardTitle>Achievements</CardTitle>
-          <CardDescription>Track your progress and unlock rewards</CardDescription>
-        </CardHeader>
-        <CardContent>
-          <Tabs defaultValue="unlocked">
-            <TabsList className="mb-4">
-              <TabsTrigger value="unlocked">Unlocked ({achievements.filter((a) => a.unlocked).length})</TabsTrigger>
-              <TabsTrigger value="locked">Locked ({achievements.filter((a) => !a.unlocked).length})</TabsTrigger>
-            </TabsList>
-            <TabsContent value="unlocked" className="space-y-4">
-              {achievements.filter((a) => a.unlocked).length === 0 ? (
-                <div className="text-center py-8 text-muted-foreground">
-                  <Trophy className="h-12 w-12 mx-auto mb-4 opacity-50" />
-                  <p>Complete exercises to unlock achievements!</p>
+        <CardContent className="p-6">
+          <div className="mb-4 flex items-center justify-between">
+            <h2 className="text-lg font-semibold">Achievements</h2>
+            <span className="text-sm text-muted-foreground">
+              {unlockedCount} of {achievements.length} unlocked
+            </span>
+          </div>
+          <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+            {achievements.map((a) => (
+              <div
+                key={a.id}
+                className={`flex items-start gap-3 rounded-2xl border p-4 ${
+                  a.unlocked ? "border-accent bg-accent/30" : "bg-muted/30"
+                }`}
+              >
+                <div
+                  className={`flex h-12 w-12 shrink-0 items-center justify-center rounded-full text-2xl ${
+                    a.unlocked ? "bg-accent" : "bg-muted grayscale"
+                  }`}
+                >
+                  {a.unlocked ? a.emoji : <Lock className="h-5 w-5 text-muted-foreground" />}
                 </div>
-              ) : (
-                achievements
-                  .filter((a) => a.unlocked)
-                  .map((achievement) => (
-                    <div key={achievement.id} className="flex items-center gap-4">
-                      <div className="flex h-10 w-10 items-center justify-center rounded-full bg-primary/10">
-                        <Award className="h-5 w-5 text-primary" />
-                      </div>
-                      <div>
-                        <p className="text-sm font-medium">{achievement.title}</p>
-                        <p className="text-xs text-muted-foreground">{achievement.description}</p>
-                      </div>
+                <div className="min-w-0 flex-1">
+                  <p className="text-sm font-semibold">{a.title}</p>
+                  <p className="text-xs text-muted-foreground">{a.description}</p>
+                  {!a.unlocked && a.goal > 1 && (
+                    <div className="mt-2">
+                      <Progress value={(a.current / a.goal) * 100} className="h-1.5" />
+                      <p className="mt-1 text-xs text-muted-foreground">
+                        {a.current} / {a.goal}
+                      </p>
                     </div>
-                  ))
-              )}
-            </TabsContent>
-            <TabsContent value="locked" className="space-y-4">
-              {achievements
-                .filter((a) => !a.unlocked)
-                .map((achievement) => (
-                  <div key={achievement.id} className="flex items-center gap-4 opacity-70">
-                    <div className="flex h-10 w-10 items-center justify-center rounded-full bg-muted">
-                      <Award className="h-5 w-5 text-muted-foreground" />
-                    </div>
-                    <div>
-                      <p className="text-sm font-medium">{achievement.title}</p>
-                      <p className="text-xs text-muted-foreground">{achievement.description}</p>
-                    </div>
-                  </div>
-                ))}
-            </TabsContent>
-          </Tabs>
+                  )}
+                </div>
+              </div>
+            ))}
+          </div>
         </CardContent>
       </Card>
     </div>
