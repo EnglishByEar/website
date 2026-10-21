@@ -12,13 +12,21 @@ import { calculateScore } from "@/lib/scoring"
 import type { Exercise, ExerciseScore } from "@/types/exercise"
 import { AudioPlayer } from "./audio-player"
 import { ResultsPanel } from "./result-panel"
+import { Badge } from "../ui/badge"
 
 interface ListeningExerciseProps {
   exercise: Exercise
   onNext?: () => void
   nextLabel?: string
 }
+const difficultyVariant = (difficulty: string) =>
+  difficulty === "Simple" ? "outline" : difficulty === "Medium" ? "secondary" : "destructive"
 
+interface ExerciseHeaderProps {
+  exercise: Pick<Exercise, "title" | "difficulty" | "category" | "duration">
+  onBack: () => void
+  backLabel?: string
+}
 export function ListeningExercise({ exercise, onNext, nextLabel = "Next Exercise" }: ListeningExerciseProps) {
   const { toast } = useToast()
   const { submitResult } = useExerciseSubmission()
@@ -60,7 +68,12 @@ export function ListeningExercise({ exercise, onNext, nextLabel = "Next Exercise
   return (
     <Card>
       <CardHeader>
-        <CardTitle>Listening Exercise</CardTitle>
+        <h1 className="text-3xl font-bold tracking-tight">{exercise.title}</h1>
+        <div className="flex items-center gap-2 mt-1">
+          <Badge variant={difficultyVariant(exercise.difficulty)}>{exercise.difficulty}</Badge>
+          <Badge variant="outline">{exercise.category}</Badge>
+          <span className="text-sm text-muted-foreground">{exercise.duration}</span>
+        </div>
         <CardDescription>
           Listen to the audio and type what you hear. You can play the audio multiple times.
         </CardDescription>

@@ -28,9 +28,9 @@ export default function ExercisePage({ params }: { params: Promise<{ id: string 
   }
 
   return (
-    <main className="min-h-screen bg-background">
+    <main className="bg-background">
       <div className="grid gap-6">
-        <ExerciseHeader exercise={exercise} onBack={() => router.push(EXERCISES_PATH)} />
+        <ExerciseHeader onBack={() => router.push(EXERCISES_PATH)} />
         
         <ListeningExercise key={exercise.id} exercise={exercise} onNext={() => router.push(EXERCISES_PATH)} />
       </div>
