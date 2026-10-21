@@ -18,6 +18,7 @@ import { LayoutDashboard, BookOpen, BookMarked, ArrowDownZA, Settings, LogOut } 
 import { useToast } from "@/hooks/use-toast"
 import { cn } from "@/lib/utils"
 import Logo from "./Logo"
+import ToggleTheme from "./toggle-theme"
 
 const navItems = [
   { name: "Home", href: "/dashboard", icon: LayoutDashboard },
@@ -84,21 +85,22 @@ export default function DashboardNav() {
             <Logo width={56} height={56} />
           </Link>
 
+
           <nav className="hidden md:flex items-center gap-1" aria-label="Main">
             {navItems.map((item) => {
               const Icon = item.icon
               const active = isActive(item.href)
               return (
                 <Link
-                  key={item.href}
-                  href={item.href}
-                  aria-current={active ? "page" : undefined}
-                  className={cn(
-                    "flex items-center gap-2 rounded-full px-4 py-2 text-sm font-medium transition-colors",
-                    active
-                      ? "bg-primary/15 text-primary"
-                      : "text-muted-foreground hover:bg-muted hover:text-foreground"
-                  )}
+                key={item.href}
+                href={item.href}
+                aria-current={active ? "page" : undefined}
+                className={cn(
+                  "flex items-center gap-2 rounded-full px-4 py-2 text-sm font-medium transition-colors",
+                  active
+                  ? "bg-primary/15 text-primary"
+                  : "text-muted-foreground hover:bg-muted hover:text-foreground"
+                )}
                 >
                   <Icon className="h-4 w-4" />
                   {item.name}
@@ -106,39 +108,42 @@ export default function DashboardNav() {
               )
             })}
           </nav>
+            <div className="flex items-center gap-4">
+            <ToggleTheme />
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button variant="ghost" className="relative h-10 w-10 rounded-full p-0">
+                  <Avatar className="h-10 w-10">
+                    <AvatarImage src={avatarUrl || "/user.png"} alt="User avatar" />
+                    <AvatarFallback>{user?.email?.charAt(0).toUpperCase() ?? "?"}</AvatarFallback>
+                  </Avatar>
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent className="w-56" align="end" forceMount>
+                <DropdownMenuLabel className="font-normal">
+                  <div className="flex flex-col space-y-1">
+                    <p className="text-sm font-medium leading-none">
+                      {user?.user_metadata?.username || "User"}
+                    </p>
+                    <p className="text-xs leading-none text-muted-foreground">{user?.email}</p>
+                  </div>
+                </DropdownMenuLabel>
+                <DropdownMenuSeparator />
+                <DropdownMenuItem asChild>
+                  <Link href="/dashboard/settings">
+                    <Settings className="mr-2 h-4 w-4" />
+                    <span>Settings</span>
+                  </Link>
+                </DropdownMenuItem>
+                <DropdownMenuSeparator />
+                <DropdownMenuItem onClick={handleLogout}>
+                  <LogOut className="mr-2 h-4 w-4" />
+                  <span>Log out</span>
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
 
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <Button variant="ghost" className="relative h-10 w-10 rounded-full p-0">
-                <Avatar className="h-10 w-10">
-                  <AvatarImage src={avatarUrl || "/user.png"} alt="User avatar" />
-                  <AvatarFallback>{user?.email?.charAt(0).toUpperCase() ?? "?"}</AvatarFallback>
-                </Avatar>
-              </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent className="w-56" align="end" forceMount>
-              <DropdownMenuLabel className="font-normal">
-                <div className="flex flex-col space-y-1">
-                  <p className="text-sm font-medium leading-none">
-                    {user?.user_metadata?.username || "User"}
-                  </p>
-                  <p className="text-xs leading-none text-muted-foreground">{user?.email}</p>
-                </div>
-              </DropdownMenuLabel>
-              <DropdownMenuSeparator />
-              <DropdownMenuItem asChild>
-                <Link href="/dashboard/settings">
-                  <Settings className="mr-2 h-4 w-4" />
-                  <span>Settings</span>
-                </Link>
-              </DropdownMenuItem>
-              <DropdownMenuSeparator />
-              <DropdownMenuItem onClick={handleLogout}>
-                <LogOut className="mr-2 h-4 w-4" />
-                <span>Log out</span>
-              </DropdownMenuItem>
-            </DropdownMenuContent>
-          </DropdownMenu>
+            </div>
         </div>
       </header>
 
