@@ -14,7 +14,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
-import { LayoutDashboard, BookOpen, BookMarked, ArrowDownZA, Settings, LogOut } from "lucide-react"
+import { LayoutDashboard, BookOpen, BookMarked, ArrowDownZA, Settings, LogOut, Trophy } from "lucide-react"
 import { useToast } from "@/hooks/use-toast"
 import { cn } from "@/lib/utils"
 import Logo from "./Logo"
@@ -25,7 +25,7 @@ const navItems = [
   { name: "Exercises", href: "/dashboard/exercises", icon: BookOpen },
   { name: "Grammar", href: "/dashboard/grammar", icon: BookMarked },
   { name: "Vocabulary", href: "/dashboard/vocabulary", icon: ArrowDownZA },
-  { name: "Settings", href: "/dashboard/settings", icon: Settings },
+  { name: "Leaderboard", href: "/dashboard/leaderboard", icon: Trophy },
 ]
 
 export default function DashboardNav() {
