@@ -22,8 +22,8 @@ import ToggleTheme from "./toggle-theme"
 
 const navItems = [
   { name: "Home", href: "/dashboard", icon: LayoutDashboard },
-  { name: "Exercises", href: "/dashboard/exercises", icon: BookOpen },
-  { name: "Grammar", href: "/dashboard/grammar", icon: BookMarked },
+  { name: "Shadowing", href: "/dashboard/exercises", icon: BookOpen },
+  { name: "Reading", href: "/dashboard/reading", icon: BookMarked },
   { name: "Vocabulary", href: "/dashboard/vocabulary", icon: ArrowDownZA },
   { name: "Leaderboard", href: "/dashboard/leaderboard", icon: Trophy },
 ]
