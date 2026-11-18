@@ -1,10 +1,10 @@
 import React from 'react'
-import Logo from './Logo'
+import MetalLogo from './metal-logo'
 
 export default function SplashScreen() {
     return (
-        <div className="flex h-screen items-center justify-center">
-            <Logo width={200} height={200} classChild={"animate-pulse"} />
+        <div className="fixed inset-0 z-[9999] bg-black flex items-center justify-center">
+            <MetalLogo width={100} height={100} classChild={"animate-pulse"} />
         </div>
     )
 }
